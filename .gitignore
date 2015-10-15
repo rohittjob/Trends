@@ -3,7 +3,9 @@
 
 data*.json
 
+# PyCharms workspace config file
 
+*workspace.xml
 
 #############
 ## Python
