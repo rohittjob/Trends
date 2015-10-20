@@ -13,10 +13,11 @@
 
 * The **portal** folder is the django project for the web portal
 * Create a database called 'trends'
+* In the settings file, change password for mysql root, in case it is different
 * Run createsuperuser to create an admin
+* Create some top trends using the admin site. I have included a screenshot for UI after creating some sample topics(with ranks). It will redirect to the details page after clicking(see screenshots).
 * Homepage can be opened using the url: 127.0.0.1:8000/home or localhost:8000/home
 * TopTrends model has a topic object and a rank object. Will be modified to include graphs n all when implementation is done.
-* Create some top trends using the admin site. I have included a screenshot for UI after creating some sample topics(with ranks). It will redirect to the details page after clicking(see screenshots).
 
 # Tweet Extractor
 
