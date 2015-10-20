@@ -12,8 +12,16 @@
 # Portal
 
 * The **portal** folder is the django project for the web portal
+* Create a database called 'trends'
+* Run createsuperuser to create an admin
+* Homepage can be opened using the url: 127.0.0.1:8000/home or localhost:8000/home
+* TopTrends model has a topic object and a rank object. Will be modified to include graphs n all when implementation is done.
+* Create some top trends using the admin site. I have included a screenshot for UI after creating some sample topics(with ranks). It will redirect to the details page after clicking(see screenshots).
 
 # Tweet Extractor
 
 * PyCharms project for extracting tweets
 * **twitter_streaming.py** extracts tweets
+
+#Screenshots
+* of samples can be added for demonstration
