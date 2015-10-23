@@ -2,6 +2,7 @@
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+import os
 
 #Variables that contains the user credentials to access Twitter API 
 access_token = "2583390259-eRijiycaorQHFeVGTI2YNfT6kc9JWtNSOdwlfnR"
@@ -13,30 +14,40 @@ consumer_secret = "anAQ83bkPT7JmIEvPssQ8CbP2tUmADq9Jn68VdHg1HiROcoJr2"
 FILESIZE_LIMIT = 10000
 DISPLAY_LIMIT = 500
 
-cnt = 1
-file_limit = 10000
-display_limit = 500
-c = 0
+file_number = 1
+file_limit = FILESIZE_LIMIT
+display_limit = DISPLAY_LIMIT
+cnt = 0
 
-tweets_file = open('data/data'+str(cnt)+'.json', "w")
+ROOT = os.path.split(os.path.realpath(__file__))[0]
+
+FILE_PATH = os.path.join(ROOT,'data')
+TEMP_PATH = os.path.join(ROOT,'temp')
+
+file_name = os.path.join(FILE_PATH,'data'+str(file_number)+'.json')
+tweets_file = open(file_name, "w")
 
 #This is a basic listener that just prints received tweets to stdout.
 class StdOutListener(StreamListener):
 
     def on_data(self, data):
-        if data[2]!='c' and data[3]!='r':
+        if not (data[2]=='c' and data[3]=='r'): # checking if valid tweet
             return True
-        global c, display_limit, file_limit, cnt, tweets_file
-        c+=1
+        global cnt, display_limit, file_limit, file_number, tweets_file, FILE_PATH, TEMP_PATH, file_name
+        cnt+=1
         tweets_file.write(data)
-        if c==display_limit:
+        if cnt==display_limit:
             print display_limit
             display_limit += DISPLAY_LIMIT
-        if c==file_limit:
-            tweets_file.close()
-            cnt+=1
+        if cnt==file_limit:
             file_limit += FILESIZE_LIMIT
-            tweets_file = open('data/data'+str(cnt)+'.json', "w")
+            tweets_file.close()
+
+            os.rename(file_name,os.path.join(TEMP_PATH,'data'+str(file_number)+'.json')) #moving file to temp folder
+
+            file_number+=1
+            file_name = os.path.join(FILE_PATH,'data'+str(file_number)+'.json')
+            tweets_file = open(file_name, "w")
 
         return True
 
@@ -48,7 +59,7 @@ if __name__ == '__main__':
 
     while True: #ensures continuous stream extraction
         try:
-            #This handles Twitter authetification and the connection to Twitter Streaming API
+            #This handles Twitter authentication and the connection to Twitter Streaming API
             l = StdOutListener()
             auth = OAuthHandler(consumer_key, consumer_secret)
             auth.set_access_token(access_token, access_token_secret)

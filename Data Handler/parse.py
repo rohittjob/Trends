@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 
-tweets_data_path = 'data/data1.json'
+tweets_data_path = 'data/'
 
 tweets_data = []
 tweets_file = open(tweets_data_path, "r")

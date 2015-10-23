@@ -2,6 +2,8 @@
 # data files
 
 data*.json
+data/*
+Data Handler/MongoDB/*
 
 # PyCharms workspace config file
 
