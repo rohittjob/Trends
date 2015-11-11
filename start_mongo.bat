@@ -1,4 +1,5 @@
 
-"Data Handler\MongoDB\bin\mongod.exe" --dbpath "Data Handler\MongoDB\db"
 
-pause	
+CALL "%~dp0Data Handler\MongoDB\bin\mongod.exe" --dbpath "%~dp0Data Handler\MongoDB\db"
+
+pause

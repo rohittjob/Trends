@@ -2,7 +2,9 @@
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-import os
+from os.path import join
+from os import rename
+from utilities.os_util import *
 
 #Variables that contains the user credentials to access Twitter API 
 access_token = "2583390259-eRijiycaorQHFeVGTI2YNfT6kc9JWtNSOdwlfnR"
@@ -11,20 +13,20 @@ consumer_key = "SVI97pI1bbxjHOevoGoyCUH5X"
 consumer_secret = "anAQ83bkPT7JmIEvPssQ8CbP2tUmADq9Jn68VdHg1HiROcoJr2"
 
 
-FILESIZE_LIMIT = 10000
-DISPLAY_LIMIT = 500
+FILESIZE_LIMIT = 1000
+DISPLAY_LIMIT = 100
+
+display_number = DISPLAY_LIMIT
 
 file_number = 1
-file_limit = FILESIZE_LIMIT
-display_limit = DISPLAY_LIMIT
 cnt = 0
 
-ROOT = os.path.split(os.path.realpath(__file__))[0]
+ROOT = get_dir(__file__)
 
-FILE_PATH = os.path.join(ROOT,'data')
-TEMP_PATH = os.path.join(ROOT,'temp')
+FILE_PATH = join(ROOT,'data')
+TEMP_PATH = join(ROOT,'temp')
 
-file_name = os.path.join(FILE_PATH,'data'+str(file_number)+'.json')
+file_name = join(FILE_PATH,'data'+str(file_number)+'.json')
 tweets_file = open(file_name, "w")
 
 #This is a basic listener that just prints received tweets to stdout.
@@ -33,26 +35,26 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         if not (data[2]=='c' and data[3]=='r'): # checking if valid tweet
             return True
-        global cnt, display_limit, file_limit, file_number, tweets_file, FILE_PATH, TEMP_PATH, file_name
+        global cnt, file_number, tweets_file, file_name, display_number
         cnt+=1
         tweets_file.write(data)
-        if cnt==display_limit:
-            print display_limit
-            display_limit += DISPLAY_LIMIT
-        if cnt==file_limit:
-            file_limit += FILESIZE_LIMIT
+        if cnt==display_number:
+            print str(display_number) + ' Tweets Downloaded'
+            display_number += DISPLAY_LIMIT
+        if cnt==FILESIZE_LIMIT:
+            cnt = 0
             tweets_file.close()
-
-            os.rename(file_name,os.path.join(TEMP_PATH,'data'+str(file_number)+'.json')) #moving file to temp folder
+            display_number = DISPLAY_LIMIT
+            rename(file_name,join(TEMP_PATH,'data'+str(file_number)+'.json')) #moving file to temp folder
 
             file_number+=1
-            file_name = os.path.join(FILE_PATH,'data'+str(file_number)+'.json')
+            file_name = join(FILE_PATH,'data'+str(file_number)+'.json')
             tweets_file = open(file_name, "w")
 
         return True
 
     def on_error(self, status):
-        print status
+        print 'error: ' + status
 
 
 if __name__ == '__main__':
@@ -60,6 +62,7 @@ if __name__ == '__main__':
     while True: #ensures continuous stream extraction
         try:
             #This handles Twitter authentication and the connection to Twitter Streaming API
+           # print "sdadas"
             l = StdOutListener()
             auth = OAuthHandler(consumer_key, consumer_secret)
             auth.set_access_token(access_token, access_token_secret)

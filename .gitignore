@@ -5,6 +5,12 @@ data*.json
 data/*
 Data Handler/MongoDB/*
 
+# virtualenv files
+
+Include/
+Scripts/
+lib/
+
 # PyCharms workspace config file
 
 *workspace.xml
@@ -39,3 +45,4 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+pip-selfcheck.json
