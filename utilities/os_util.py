@@ -8,9 +8,8 @@ def get_dir(filename):
 
 def get_files_in_dir(directory, ext=None):
     if ext:
-        files = [ f for f in listdir(directory) if splitext(f)[1] == ext and isfile(join(directory,f)) ]
+        files = [f for f in listdir(directory) if splitext(f)[1] == ext and isfile(join(directory, f))]
     else:
-        files = [ f for f in listdir(directory) if isfile(join(directory,f)) ]
+        files = [f for f in listdir(directory) if isfile(join(directory, f))]
 
     return files
-

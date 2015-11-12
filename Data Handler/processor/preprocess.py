@@ -1,22 +1,26 @@
-from time import sleep
 from pymongo import MongoClient
-from datetime import datetime
 from utilities.constants import *
 from utilities.os_util import *
-from utilities.util import start, stop, check_percent
-import pytz, json
+from utilities.util import check_percent
+from utilities.time_management import *
+from os import remove
+import pytz
+import json
 
 
 ROOT = dirname(get_dir(__file__))
-TEMP_PATH = join(ROOT,'extractor','temp')
+TEMP_PATH = join(ROOT, EXTRACTOR_DIR, PREPROCESSOR_TEMP_DIR)
+TODAY = get_today() 
+
+COLLECTION_NAME = RAW_COLLECTION + get_date_string(TODAY)
 
 
 client = MongoClient()
 db = client.tweets
-collection = db.raw1
+collection = db[COLLECTION_NAME]
 
 
-def extract_data(file_path): # load json file into a list of dictionaries
+def extract_data(file_path):  # load json file into a list of dictionaries
     tweets_data = []
     tweets_file = open(file_path, "r")
     for line in tweets_file:
@@ -30,8 +34,8 @@ def extract_data(file_path): # load json file into a list of dictionaries
 
 
 def extract_time(date):
-    date = datetime.strptime(date,DATETIME_FORMAT)
-    date.replace(tzinfo= pytz.UTC)
+    date = datetime.strptime(date, DATETIME_FORMAT)
+    date.replace(tzinfo=pytz.UTC)
     return date
 
 
@@ -48,18 +52,17 @@ def get_hash_and_mentions(entities):
     return new_entities
 
 
-def getURLs(entities):
+def get_urls(entities):
     urls = []
     for url in entities[URLS]:
         urls.append(url[URL])
     return urls
 
 
-def process(tweets_data): # extract relevant information from tweets
+def process(tweets_data):  # extract relevant information from tweets
     new_data = []
     for tweet in tweets_data:
-        new_tweet = {}
-        new_tweet[ENTITIES] = get_hash_and_mentions(tweet[ENTITIES])
+        new_tweet = {ENTITIES: get_hash_and_mentions(tweet[ENTITIES])}
 
         if len(new_tweet[ENTITIES]) == 0:  # checking if tweet has hashtags or user mentions
             continue
@@ -69,7 +72,7 @@ def process(tweets_data): # extract relevant information from tweets
         new_tweet[TWEET] = tweet[TEXT]
         new_tweet[RETWEETS] = tweet[RETWEET_COUNT]
 
-        new_tweet[URLS] = getURLs(tweet[ENTITIES])
+        new_tweet[URLS] = get_urls(tweet[ENTITIES])
 
         new_tweet[COORDINATES] = tweet[COORDINATES]
         new_tweet[PLACE] = tweet[PLACE]
@@ -80,22 +83,21 @@ def process(tweets_data): # extract relevant information from tweets
 
 if __name__ == '__main__':
 
-    print "Started Preprocessing"
-    files = get_files_in_dir(TEMP_PATH,JSON)
-    l = len(files)
+    print "Started Preprocessing... ",
+    data_files = get_files_in_dir(TEMP_PATH, JSON)
+    l = len(data_files)
     cnt = 0
     completed_percentage = check_percent(cnt, l, 5, 0)
     start()
-    for file in files:
+    for data_file in data_files:
+        file_path = join(TEMP_PATH, data_file)
         cnt += 1
-        tweets_data = extract_data(join(TEMP_PATH,file))
+        tweets_data = extract_data(file_path)
         new_data = process(tweets_data)
         collection.insert_many(new_data)
+        remove(file_path)
         completed_percentage = check_percent(cnt, l, 5, completed_percentage)
+
     print
+    print 'Finished'
     stop()
-
-
-
-
-

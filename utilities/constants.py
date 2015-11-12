@@ -25,21 +25,34 @@ USERNAME = 'Username'
 # Mongo database literals
 
 TWEETS_DB = 'tweets'
-RAW_COLLECTION = 'raw'
-RESULTS_COLLECTION = 'map_reduce_results'
+RAW_COLLECTION = 'raw_'
+RESULTS_COLLECTION = 'result_'
+WEEKLY_RESULTS_COLLECTION = 'weekly_result_'
 VALUE = 'value.count'
 
-# time constants
-
-SECONDS = 1
-MINUTES = 60 * SECONDS
-HOURS = 60*MINUTES
-
-PREPROCESS_SLEEP_TIME = 10*SECONDS
-STOP_DATA_EXTRACTION_TIME = '21:54'
 
 # FileNames
 MAP_FUNCTION = 'mapFunction.js'
 REDUCE_FUNCTION = 'reduceFunction.js'
+AGGREGATION_MAP_ADD_FUNCTION = 'aggregationAddMapFunction.js'
+AGGREGATION_MAP_SUBTRACT_FUNCTION = 'aggregationSubtractMapFunction.js'
+AGGREGATION_REDUCE_FUNCTION = 'aggregationReduceFunction.js'
+
+PREPROCESSOR = 'preprocess.py'
+POSTPROCESSOR = 'postprocess.py'
+DAILY_AGGREGATOR = 'daily_aggregation.py'
+WEEKLY_AGGREGATOR = 'weekly_aggregation.py'
+EXTRACTOR = 'tweet_extractor.py'
+
+DATA_FILE_PREFIX = 'data'
+
+# Directories
+
+EXTRACTOR_DIR = 'extractor'
+PROCESSOR_DIR = 'processor'
+DATA_HANDLER_DIR = 'Data Handler'
+EXTRACTOR_DATA_DIR = 'data'
+PREPROCESSOR_TEMP_DIR = 'temp'
+
 
 JSON = '.json'

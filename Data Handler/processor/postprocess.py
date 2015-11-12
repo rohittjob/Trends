@@ -1,18 +1,36 @@
-from pymongo import MongoClient
-from bson.code import Code
+from utilities.time_management import *
+from utilities.os_util import *
 from utilities.constants import *
-from utilities.util import start, stop
-client = MongoClient()
-db = client.tweets
-coll = db.raw
+from os.path import join
+import subprocess
+from multiprocessing import Process
+
+TODAY = get_today()
+
+ROOT = get_dir(__file__)
+DAILY_SCRIPT_PATH = join(ROOT, DAILY_AGGREGATOR)
+WEEKLY_SCRIPT_PATH = join(ROOT, WEEKLY_AGGREGATOR)
+
+
+def daily_aggregation():
+    print 'Starting Daily Aggregator... ',
+    daily_aggregator = subprocess.Popen(['python', DAILY_SCRIPT_PATH])
+    print 'Started with PID ' + str(daily_aggregator.pid)
+    daily_aggregator.wait()
+
+
+def weekly_aggregation():
+    print 'Starting Weekly Aggregator... ',
+    weekly_aggregator = subprocess.Popen(['python', WEEKLY_SCRIPT_PATH])
+    print 'Started with PID ' + str(weekly_aggregator.pid)
+    weekly_aggregator.wait()
+
 
 if __name__ == '__main__':
 
-    start()
-    map = Code(open(MAP_FUNCTION,'r').read())
-    reduce = Code(open(REDUCE_FUNCTION,'r').read())
-    coll.map_reduce(map,reduce,RESULTS_COLLECTION)
-
-    stop()
-
-    print db.collection_names()
+    daily_aggregator = Process(target=daily_aggregation)
+    weekly_aggregator = Process(target=weekly_aggregation)
+    daily_aggregator.start()
+    daily_aggregator.join()
+    weekly_aggregator.start()
+    weekly_aggregator.join()

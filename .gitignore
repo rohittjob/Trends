@@ -3,7 +3,8 @@
 
 data*.json
 data/*
-Data Handler/MongoDB/*
+Data Handler/MongoDB/db/*
+Data Handler/multi/*
 
 # virtualenv files
 

@@ -1,6 +1,7 @@
 from utilities.time_management import *
 from utilities.os_util import *
 from utilities.constants import *
+from utilities.config import *
 from os.path import join
 from os import remove
 from time import sleep
@@ -9,12 +10,16 @@ import psutil
 from multiprocessing import Process, Value
 
 TODAY = get_today()
+TOMORROW = get_next_day(TODAY)
 STOP_TIME = None
 RESTART_TIME = None
 
 ROOT = get_dir(__file__)
-EXTRACTOR_SCRIPT_PATH = join(ROOT,'Data Handler','extractor','tweet_extractor.py')
-PREPROCESS_SCRIPT_PATH = join(ROOT,'Data Handler','processor','preprocess.py')
+
+EXTRACTOR_SCRIPT_PATH = join(ROOT, DATA_HANDLER_DIR, EXTRACTOR_DIR, EXTRACTOR)
+PREPROCESS_SCRIPT_PATH = join(ROOT, DATA_HANDLER_DIR, PROCESSOR_DIR, PREPROCESSOR)
+POSTPROCESS_SCRIPT_PATH = join(ROOT, DATA_HANDLER_DIR, PROCESSOR_DIR, POSTPROCESSOR)
+EXTRACTOR_DATA_PATH = join(ROOT, DATA_HANDLER_DIR, EXTRACTOR_DIR, EXTRACTOR_DATA_DIR)
 
 
 def cleanup(extractor_pid):
@@ -30,24 +35,23 @@ def cleanup(extractor_pid):
     print 'Killed!!'
 
     print 'Cleaning up breadcrumbs... ',
-    EXTRACTOR_DATA_PATH = join(ROOT,'Data Handler','extractor','data')
     deleted = False
     while not deleted:
         try:
-            files = get_files_in_dir(EXTRACTOR_DATA_PATH)
+            data_files = get_files_in_dir(EXTRACTOR_DATA_PATH, JSON)
 
-            for file in files:
-                remove(join(EXTRACTOR_DATA_PATH,file))
+            for data_file in data_files:
+                remove(join(EXTRACTOR_DATA_PATH, data_file))
             deleted = True
-        except: None
+        except:
+            None
 
     print 'Cleaned'
 
 
-
 def data_extraction(extractor_pid):
     print 'Starting Extractor... ',
-    extractor = subprocess.Popen(['python',EXTRACTOR_SCRIPT_PATH ])
+    extractor = subprocess.Popen(['python', EXTRACTOR_SCRIPT_PATH])
     print 'Started with PID ' + str(extractor.pid)
     extractor_pid.value = extractor.pid
     extractor.wait()
@@ -56,24 +60,32 @@ def data_extraction(extractor_pid):
 def data_preprocess(stop):
     while stop.value == 0:
         print 'Starting Pre-processor... ',
-        preprocessor = subprocess.Popen(['python',PREPROCESS_SCRIPT_PATH ])
-        print 'Started with PID ' + str(preprocessor.pid)
-        preprocessor.wait()
+        pre_processor = subprocess.Popen(['python', PREPROCESS_SCRIPT_PATH])
+        print 'Started with PID ' + str(pre_processor.pid)
+        pre_processor.wait()
         print 'Sleeping'
         sleep(PREPROCESS_SLEEP_TIME)
         print 'Woke Up!!!'
 
+
+def data_postprocess():
+    print 'Starting Post-processor... ',
+    post_processor = subprocess.Popen(['python', POSTPROCESS_SCRIPT_PATH])
+    print 'Started with PID ' + str(post_processor.pid)
+    post_processor.wait()
+
+
 if __name__ == '__main__':
 
     while True:  # run everyday
-        STOP_TIME = get_datetime(TODAY,STOP_DATA_EXTRACTION_TIME)
-        print STOP_TIME
+        STOP_TIME = get_datetime(TODAY, STOP_DATA_EXTRACTION_TIME)
+        RESTART_TIME = get_datetime(TOMORROW, RESTART_DATA_EXTRACTION_TIME)
 
-        stop = Value('i', 0)
-        extractor_pid = Value('i',0)
+        stop_preprocessor = Value('i', 0)
+        extractor_pid = Value('i', 0)
 
-        extractor = Process(target=data_extraction, args=(extractor_pid, ))
-        preprocessor = Process(target=data_preprocess, args=(stop, ))
+        extractor = Process(target=data_extraction, args=(extractor_pid,))
+        preprocessor = Process(target=data_preprocess, args=(stop_preprocessor,))
         extractor.start()
         preprocessor.start()
 
@@ -81,9 +93,17 @@ if __name__ == '__main__':
 
         extractor.terminate()
         cleanup(extractor_pid.value)
-        stop.value = 1
+
         print 'Waiting for preprocessor to exit... ',
+        stop_preprocessor.value = 1
         preprocessor.join()
         print 'Done'
-        break
+
+        postprocessor = Process(target=data_postprocess)
+        postprocessor.start()
+
+        alarm(RESTART_TIME)
+        print 'Restarting scripts!!! '
+        TODAY = TOMORROW
+        TOMORROW = get_next_day(TODAY)
 
