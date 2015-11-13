@@ -1,3 +1,11 @@
+# init
+
+* **Clone** the git repository
+* Run **python_path.bat** to add **PYTHONPATH** env variable. This needs to be done only **once**
+* Make necessary changes in the **config.py** file in **engine\utilities\**
+* Run **python init.py** in Command Prompt to start engine
+* To stop, close **all** Command Prompt and Python windows
+
 # Workflow
 
 * Control of engine starts with **manager.py**
@@ -31,13 +39,6 @@
 * It calls two subprocesses
 * The first one calculates the current day's aggregate
 * The second one calculates the new weekly aggregate as mentioned in the .ppt
-
-
-# init
-
-* Clone the git repository
-* Run the **start_mongo.bat** to start MongoDB
-* Run **manager.py** to start engine **(Do not do this yet)**
 
 # Dataset
 
