@@ -2,15 +2,8 @@
 # data files
 
 data*.json
-data/*
-Data Handler/MongoDB/db/*
-Data Handler/multi/*
-
-# virtualenv files
-
-Include/
-Scripts/
-lib/
+engine/MongoDB/*
+engine/multi/*
 
 # PyCharms workspace config file
 
