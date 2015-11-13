@@ -51,7 +51,7 @@ DATA_FILE_PREFIX = 'data'
 
 REQUIREMENTS = 'requirements.txt'
 PIP_INSTALL_FILE = 'get-pip.py'
-PYTHON_INSTALL_FILE = 'python_install.bat'
+PYTHON_INSTALL_FILE = 'python_install.lnk'
 MONGO_INSTALL_FILE = 'mongo_install.lnk'
 
 # Directories
