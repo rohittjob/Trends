@@ -1,5 +1,5 @@
 from engine.utilities.os_util import *
-from engine.utilities.util import check_percent
+from engine.utilities.miscellaneous import check_percent
 from engine.utilities.time_management import *
 from engine.utilities.mongo import *
 from engine.utilities.constants import *
@@ -70,6 +70,7 @@ def get_urls(entities):
 def process(tweets_data):  # extract relevant information from tweets
     new_data = []
     for tweet in tweets_data:
+
         new_tweet = {ENTITIES: get_hash_and_mentions(tweet[ENTITIES])}
 
         if len(new_tweet[ENTITIES]) == 0:  # checking if tweet has hashtags or user mentions

@@ -49,9 +49,9 @@ def data_preprocess(stop_bool):
         pre_processor = subprocess.Popen(['python', PREPROCESS_SCRIPT_PATH])
         print 'Started with PID ' + str(pre_processor.pid)
         pre_processor.wait()
-        print 'Sleeping'
+        print 'Pre-processor Sleeping'
         sleep(PREPROCESS_SLEEP_TIME)
-        print 'Woke Up!!!'
+        print 'Pre-processor Woke Up!!!'
 
 
 def data_postprocess():
@@ -62,8 +62,8 @@ def data_postprocess():
 
 if __name__ == '__main__':
     while True:  # run everyday
-        STOP_TIME = get_datetime(TODAY, STOP_DATA_EXTRACTION_TIME)
-        RESTART_TIME = get_datetime(TOMORROW, RESTART_DATA_EXTRACTION_TIME)
+        STOP_TIME = get_datetime_from_string(TODAY, STOP_DATA_EXTRACTION_TIME)
+        RESTART_TIME = get_datetime_from_string(TOMORROW, RESTART_DATA_EXTRACTION_TIME)
 
         stop_preprocessor = Value('i', 0)
         extractor_pid = Value('i', 0)
@@ -78,14 +78,12 @@ if __name__ == '__main__':
         extractor.terminate()
         cleanup()
 
-        print 'Waiting for preprocessor to exit... ',
         stop_preprocessor.value = 1
         preprocessor.join()
-        print 'Done'
+        print 'Pre-processor exiting...'
 
         data_postprocess()
 
-        print 'Waiting for restart alarm... ',
         alarm(RESTART_TIME)
         print 'Restarting scripts!!! '
         TODAY = TOMORROW

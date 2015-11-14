@@ -1,4 +1,5 @@
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PERCENTAGE COMPLETION FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+import json
 
 
 def check_percent(cur_count, total_count, interval, prev):      # interval it is the interval of display,
@@ -13,5 +14,12 @@ def check_percent(cur_count, total_count, interval, prev):      # interval it is
     print str(prev) + '% complete',
     return prev
 
+
+def is_json(obj):
+    try:
+        boolean = (len(json.loads(obj).keys()) > 0)
+    except:
+        return False
+    return boolean
 
 

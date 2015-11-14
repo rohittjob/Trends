@@ -8,7 +8,7 @@ def get_next_day(current_day):
     return current_day
 
 
-def get_datetime(obj, time_string):
+def get_datetime_from_string(obj, time_string):
     set_time = datetime.strptime(time_string, '%H:%M')
     new_obj = obj.replace(hour=set_time.hour, minute=set_time.minute, second=0)
     return new_obj
@@ -18,13 +18,18 @@ def get_today():
     return datetime.today()
 
 
+def get_time():
+    return datetime.now().time().strftime('%H:%M:%S')
+
+
 def alarm(set_time):
+    print "Alarm set at " + str(set_time)
     while True:
         if datetime.now() >= set_time:
             break
         remain = set_time - datetime.now()
         sleep(remain.seconds)
-    print "Done"
+    print "Alarm Rings..."
 
 
 def get_date_string(date_obj):
@@ -32,11 +37,12 @@ def get_date_string(date_obj):
     return date_string
 
 
+# %%%%%%%%%%%%%%%%%%%%%%%%% EXECUTION TIME FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 start_time = None
 end_time = None
 
-
-# %%%%%%%%%%%%%%%%%%%%%%%%% EXECUTION TIME FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 def time_taken():
     global start_time, end_time

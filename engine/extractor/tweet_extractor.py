@@ -6,6 +6,8 @@ from os import rename
 from engine.utilities.os_util import *
 from engine.utilities.config import *
 from engine.utilities.constants import *
+from engine.utilities.time_management import get_time
+from engine.utilities.miscellaneous import is_json
 
 # Variables that contains the user credentials to access Twitter API
 access_token = "2583390259-eRijiycaorQHFeVGTI2YNfT6kc9JWtNSOdwlfnR"
@@ -22,7 +24,8 @@ FILE_NAME_FORMATTER = '%0' + str(FILE_NAME_SUFFIX_DIGITS) + 'd'
 display_number = DISPLAY_INTERVAL
 
 file_number = 1
-cnt = 0
+file_cnt = 0
+total_cnt = 0
 
 ROOT = get_dir(__file__)
 
@@ -39,10 +42,9 @@ tweets_file = open(file_name, "w")
 
 
 def change_file():
-    global tweets_file, file_name, file_number, display_number
+    global tweets_file, file_name, file_number
 
     tweets_file.close()
-    display_number = DISPLAY_INTERVAL
     rename(file_name, get_filename(TEMP_PATH, file_number))  # moving file to temp folder
 
     file_number += 1
@@ -57,19 +59,21 @@ def change_file():
 class StdOutListener(StreamListener):
 
     def on_data(self, data):
-        if not (data[2] == 'c' and data[3] == 'r'):  # checking if invalid tweet
-            return True
 
-        global cnt, file_number, tweets_file, file_name, display_number
-        cnt += 1
+        if not is_json(data):  # checking if invalid tweet
+            return True
+        global file_cnt, file_number, tweets_file, file_name, display_number, total_cnt
+        file_cnt += 1
+        total_cnt += 1
         tweets_file.write(data)
 
-        if cnt == display_number:
-            print str(display_number) + ' Tweets Downloaded'
+        if total_cnt == display_number:
+            print '\r',
+            print str(display_number) + ' Tweets Downloaded',
             display_number += DISPLAY_INTERVAL
 
-        if cnt == FILESIZE_LIMIT:
-            cnt = 0
+        if file_cnt == FILESIZE_LIMIT:
+            file_cnt = 0
             change_file()
 
         return True
@@ -80,7 +84,7 @@ class StdOutListener(StreamListener):
 
 if __name__ == '__main__':
 
-    print "Started extracting tweets... "
+    print "Started extracting tweets at " + get_time() + "... "
 
     while True:  # ensures continuous stream extraction
         try:
