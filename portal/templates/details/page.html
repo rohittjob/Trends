@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<head>
+  <meta charset="utf-8">
+  <title>Details</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+
+  <!-- stylesheet css -->
+
+  <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/templatemo-blue.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/d3.css" %}" type="text/css">
+</head>
+
+<style>
+#graph, #tweets{
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 30px;
+  background: #FFF;
+  padding: 10;
+  overflow: none;
+  box-shadow: 3px 3px 3px rgba(0,0,0,.5);
+}
+</style>
+
+
+<body data-spy="scroll" data-target=".navbar-collapse">
+<h2 style="margin-left : 100px; margin-top : 40px; color : #FFF; font-family: ProximaNova-Bold;"> {{ topic_name }} </h2>
+<p style="margin-left : 115px; color : #FFF; margin-bottom : 25px;">
+  <script>
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth(); //January is 0!
+    var yyyy = today.getFullYear();
+    var months = [ "January", "February", "March", "April", "May", "June", 
+               "July", "August", "September", "October", "November", "December" ];
+    var month = months[mm];
+
+    if(dd<10) {
+      dd='0'+dd
+    } 
+
+    today = month+' '+dd+', '+yyyy;
+    document.write(today);
+  </script>
+  -  Now
+</p>
+<div id="graph">
+  <h4 class="accent" style="padding:20px; color: #424242;"><u>Trend for {{ topic_name }} over the past week</u></h4>
+  <svg></svg>
+</div>
+
+<div id="tweets">
+  <h4 class="accent" style="padding:20px; color: #424242;"><u>Top tweets for {{ topic_name }}</u></h4>
+  <ul>
+      <li style="padding:10px;">Tweet 1</li><hr>
+      <li style="padding:10px;">Tweet 2</li><hr>
+      <li style="padding:10px;">Tweet 3</li><hr>
+      <li style="padding:10px;">Tweet 4</li><hr>
+      <li style="padding:10px;">Tweet 5</li><hr>
+  </ul>
+</div>
+
+<h4 class="accent" style="margin-left: 100px; margin-top: 30px; color: #424242;">Related topics</h4>
+
+<div style="margin-left: 85px; margin-right: 85px;">
+  <div class="floating-box">Related topic 1</div>
+  <div class="floating-box">Related topic 2</div>
+  <div class="floating-box">Related topic 3</div>
+  <div class="floating-box">Related topic 4</div>
+  <div class="floating-box">Related topic 5</div>
+  <div class="floating-box">Related topic 6</div>
+</div>
+<!-- javascript js -->  
+
+<script src="{% static "js/v.js" %}"></script>
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/nvtooltip.js" %}"></script>
+<script src="{% static "js/legend.js" %}"></script> 
+<script src="{% static "js/line.js" %}"></script> 
+<script src="{% static "js/linewithlegend.js" %}"></script> 
+
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/jquery.backstretch.min.js" %}"></script>
+<script src="{% static "js/custom.js" %}"></script>
+<script>
+
+function log(text) {
+  if (console && console.log) console.log(text);
+  return text;
+}
+
+
+
+$(document).ready(function() {
+  var margin = {top: 30, right: 10, bottom: 50, left: 60},
+      chart = d3LineWithLegend()
+                .xAxis.label('Date')
+                .width(width(margin))
+                .height(height(margin))
+                .yAxis.label('Usage Frequency');
+
+
+  var svg = d3.select('#graph svg')
+      .datum(generateData())
+
+  svg.transition().duration(2000)
+      .attr('width', width(margin))
+      .attr('height', height(margin))
+      .call(chart);
+
+
+  chart.dispatch.on('showTooltip', function(e) {
+  var offset = $('#graph').offset(), // { left: 0, top: 0 }
+        left = e.pos[0] + offset.left,
+        top = e.pos[1] + offset.top,
+        formatter = d3.format(".04f");
+
+    var content = '<h5>' + e.series.label + '</h5>' +
+                  '<p>' +
+                  '<span class="value">[' + e.point[0] + ', ' + formatter(e.point[1]) + ']</span>' +
+                  '</p>';
+
+    nvtooltip.show([left, top], content);
+  });
+
+  chart.dispatch.on('hideTooltip', function(e) {
+    nvtooltip.cleanup();
+  });
+
+
+
+
+  $(window).resize(function() {
+    var margin = chart.margin();
+
+    chart
+      .width(width(margin))
+      .height(height(margin));
+
+    d3.select('#graph svg')
+      .attr('width', width(margin))
+      .attr('height', height(margin))
+      .call(chart);
+
+    });
+
+
+
+
+  function width(margin) {
+    var w = $(window).width() - 300;
+
+    return ( (w - margin.left - margin.right - 20) < 0 ) ? margin.left + margin.right + 2 : w;
+  }
+
+  function height(margin) {
+    var h = $(window).height() - 200;
+
+    return ( h - margin.top - margin.bottom - 20 < 0 ) ? 
+              margin.top + margin.bottom + 2 : h;
+  }
+
+
+  //data
+  function generateData() {
+    var freq = [];
+
+    for (var i = 0; i < 169; i++) {
+      freq.push([ i/24, Math.random()]);
+    }
+
+    return [
+      {
+        data: freq,
+        label: "Number of tweets"
+      }
+    ];
+  }
+
+});
+
+
+</script>
+
+<!-- footer section -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-sm-12" style="color:#3366CC;">
+        <p>Created by students of MNNIT Allahabad</p>
+        <ul class="social-icons">
+          <li><a href="#" class="fa fa-facebook"></a></li>
+          <li><a href="#" class="fa fa-twitter"></a></li>
+          <li><a href="#" class="fa fa-github"></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

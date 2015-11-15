@@ -94,25 +94,29 @@
 		<div class="col-md-8 col-sm-12">
 			<div class="hashtags" style="height: 450px;">
 				<h2 class="white">Hashtags</h2>
-						<ul>
-						<li > <a href="page.html">#first</a></li>
-						<li>#second</li>
-						<li>#third</li>
-						<li>#fourth</li>
-						<li>#fifth</li>
-					</ul>
+			
+				{% if topics_list %}
+   					<ol>
+   					{% for curtopic in topics_list %}
+       					<li><a href="/details/{{ curtopic.rank }}/">{{ curtopic.topic }}</a></li>
+   					{% endfor %}
+   					</ol>
+				{% else %}
+	   				<p>No topics are available.</p>
+				{% endif %}
+			
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-12" >
 			<div class="topics" style="height: 450px;">
 				<h2>Topics</h2>
-					<ul>
+					<ol>
 						<li> <a href="page.html">Topic1 </a></li>
 						<li>Topic2</li>
 						<li>Topic3</li>
 						<li>Topic4</li>
 						<li>Topic5</li>
-					</ul>
+					</ol>
 			</div>
 		</div>
 	</div>
