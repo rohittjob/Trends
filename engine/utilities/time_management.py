@@ -14,6 +14,10 @@ def get_datetime_from_string(obj, time_string):
     return new_obj
 
 
+def get_now():
+    return datetime.now()
+
+
 def get_today():
     return datetime.today()
 
@@ -22,8 +26,12 @@ def get_time():
     return datetime.now().time().strftime('%H:%M:%S')
 
 
-def alarm(set_time):
-    print "Alarm set at " + str(set_time)
+def add_seconds_to_datetime(obj, seconds):
+    return obj + timedelta(seconds=seconds)
+
+
+def alarm(proc_name, set_time):
+    print "Alarm set for '" + proc_name + "' at " + str(set_time)
     while True:
         if datetime.now() >= set_time:
             break

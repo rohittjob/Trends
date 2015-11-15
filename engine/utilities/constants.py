@@ -28,6 +28,8 @@ TWEETS_DB = 'tweets'
 RAW_COLLECTION = 'raw_'
 RESULTS_COLLECTION = 'result_'
 WEEKLY_RESULTS_COLLECTION = 'weekly_result_'
+TEMP_RAW_COLLECTION = 'raw_temp'
+TEMP_RESULTS_COLLECTION = 'result_temp'
 VALUE = 'value'
 TAG = '_id'
 
@@ -42,10 +44,10 @@ AGGREGATION_REDUCE_FUNCTION = 'aggregationReduceFunction.js'
 MONGO_INIT_FILE = 'start_mongo.bat'
 ENGINE_MANAGER = 'manager.py'
 PREPROCESSOR = 'preprocess.py'
-POSTPROCESSOR = 'postprocess.py'
 DAILY_AGGREGATOR = 'daily_aggregation.py'
 WEEKLY_AGGREGATOR = 'weekly_aggregation.py'
 EXTRACTOR = 'tweet_extractor.py'
+PROCESSOR = 'process.py'
 
 DATA_FILE_PREFIX = 'data'
 
@@ -68,6 +70,12 @@ BATCH_DIR = 'batch'
 MONGO_DIR = 'MongoDB'
 
 WHEELHOUSE = 'wheelhouse'
+
+# Processes
+
+MANAGER = 'Manager'
+PROCESSOR_PROCESS = 'Processor'
+
 
 
 JSON = '.json'

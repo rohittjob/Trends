@@ -9,19 +9,19 @@ from os.path import join
 ROOT = get_dir(__file__)
 
 
-def check(collection):
-    if not check_collection(TWEETS_DB, collection):
-        create_raw(TWEETS_DB, collection)
-
 TODAY = get_today()
 COLLECTION_NAME = RAW_COLLECTION + get_date_string(TODAY)
 RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + get_date_string(TODAY)
 
-check(COLLECTION_NAME)
+create_raw(TEMP_RAW_COLLECTION)
+create_raw(COLLECTION_NAME)
+create_result(TWEETS_DB, TEMP_RESULTS_COLLECTION)
 
 client = MongoClient()
 db = client.tweets
 coll = db[COLLECTION_NAME]
+temp_raw = db[TEMP_RAW_COLLECTION]
+temp_results = db[TEMP_RESULTS_COLLECTION]
 
 if __name__ == '__main__':
 
@@ -31,7 +31,16 @@ if __name__ == '__main__':
 
     map_function = Code(open(join(ROOT, MAP_FUNCTION), 'r').read())
     reduce_function = Code(open(join(ROOT, REDUCE_FUNCTION), 'r').read())
-    coll.map_reduce(map_function, reduce_function, RESULTS_COLLECTION_NAME)
+    aggregate_map_function = Code(open(join(ROOT, AGGREGATION_MAP_ADD_FUNCTION), 'r').read())
+    aggregate_reduce_function = Code(open(join(ROOT, AGGREGATION_REDUCE_FUNCTION), 'r').read())
+
+    temp_raw.map_reduce(map_function, reduce_function, TEMP_RESULTS_COLLECTION)
+    temp_results.map_reduce(aggregate_map_function, aggregate_reduce_function, {'reduce': RESULTS_COLLECTION_NAME})
+
+    if temp_raw.count() > 0:
+        coll.insert_many(temp_raw.find())
+    temp_results.drop()
+    temp_raw.drop()
 
     print 'Finished'
     stop()

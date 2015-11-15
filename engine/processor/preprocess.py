@@ -14,18 +14,11 @@ ROOT = dirname(get_dir(__file__))
 TEMP_PATH = join(ROOT, EXTRACTOR_DIR, PREPROCESSOR_TEMP_DIR)
 TODAY = get_today() 
 
-
-def check(coll):
-    if not check_collection(TWEETS_DB, coll):
-        create_raw(TWEETS_DB, coll)
-
-COLLECTION_NAME = RAW_COLLECTION + get_date_string(TODAY)
-
-check(COLLECTION_NAME)
+create_raw(TWEETS_DB, TEMP_RAW_COLLECTION)
 
 client = MongoClient()
 db = client.tweets
-collection = db[COLLECTION_NAME]
+collection = db[TEMP_RAW_COLLECTION]
 
 
 def extract_data(file_path):  # load json file into a list of dictionaries
@@ -70,23 +63,25 @@ def get_urls(entities):
 def process(tweets_data):  # extract relevant information from tweets
     new_data = []
     for tweet in tweets_data:
+        try:
+            new_tweet = {ENTITIES: get_hash_and_mentions(tweet[ENTITIES])}
+            if len(new_tweet[ENTITIES]) == 0:  # checking if tweet has hashtags or user mentions
+                continue
 
-        new_tweet = {ENTITIES: get_hash_and_mentions(tweet[ENTITIES])}
+            new_tweet[TIMESTAMP] = extract_time(tweet[CREATED_AT])
+            new_tweet[USERNAME] = tweet[USER][SCREEN_NAME]
+            new_tweet[TWEET] = tweet[TEXT]
+            new_tweet[RETWEETS] = tweet[RETWEET_COUNT]
 
-        if len(new_tweet[ENTITIES]) == 0:  # checking if tweet has hashtags or user mentions
-            continue
+            new_tweet[URLS] = get_urls(tweet[ENTITIES])
 
-        new_tweet[TIMESTAMP] = extract_time(tweet[CREATED_AT])
-        new_tweet[USERNAME] = tweet[USER][SCREEN_NAME]
-        new_tweet[TWEET] = tweet[TEXT]
-        new_tweet[RETWEETS] = tweet[RETWEET_COUNT]
-
-        new_tweet[URLS] = get_urls(tweet[ENTITIES])
-
-        new_tweet[COORDINATES] = tweet[COORDINATES]
-        new_tweet[PLACE] = tweet[PLACE]
-        new_tweet[ID] = tweet[ID]
-        new_data.append(new_tweet)
+            new_tweet[COORDINATES] = tweet[COORDINATES]
+            new_tweet[PLACE] = tweet[PLACE]
+            new_tweet[ID] = tweet[ID]
+            new_data.append(new_tweet)
+        except:
+            'Tweet Error'
+            print tweet
     return new_data
 
 

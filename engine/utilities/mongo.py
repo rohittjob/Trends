@@ -14,14 +14,16 @@ def check_collection(db, coll):
 
 
 def create_result(db, coll):
-    print 'Creating collection ' + coll + '!!!'
-    db = client[db]
-    coll = db[coll]
-    coll.create_index([(VALUE, DESCENDING)])
+    if not check_collection(db, coll):
+        print 'Creating collection ' + coll + '!!!'
+        db = client[db]
+        coll = db[coll]
+        coll.create_index([(VALUE, DESCENDING)])
 
 
 def create_raw(db, coll):
-    print 'Creating collection ' + coll + '!!!'
-    db = client[db]
-    coll = db[coll]
-    coll.create_index([(ENTITIES, ASCENDING), (TIMESTAMP, ASCENDING)])
+    if not check_collection(db, coll):
+        print 'Creating collection ' + coll + '!!!'
+        db = client[db]
+        coll = db[coll]
+        coll.create_index([(ENTITIES, ASCENDING), (TIMESTAMP, ASCENDING)])

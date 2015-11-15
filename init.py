@@ -65,7 +65,6 @@ def check_mongo_db():
     return subprocess.Popen(MONGO_INIT_BATCH, creationflags=subprocess.CREATE_NEW_CONSOLE)
 
 
-
 if __name__ == '__main__':
     check_python()
     check_dependencies()

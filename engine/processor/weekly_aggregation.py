@@ -13,19 +13,15 @@ WEEK_START = TODAY - timedelta(days=7)
 NEW_WEEK_START = WEEK_START + timedelta(days=1)
 
 
-def check(coll):
-    if not check_collection(TWEETS_DB, coll):
-        create_result(TWEETS_DB, coll)
-
 PREVIOUS_WEEKLY_COLLECTION_NAME = WEEKLY_RESULTS_COLLECTION + get_date_string(WEEK_START)
 NEW_WEEKLY_COLLECTION_NAME = WEEKLY_RESULTS_COLLECTION + get_date_string(NEW_WEEK_START)
 LATEST_RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + get_date_string(TODAY)
 OLDEST_RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + get_date_string(WEEK_START)
 
 
-check(PREVIOUS_WEEKLY_COLLECTION_NAME)
-check(LATEST_RESULTS_COLLECTION_NAME)
-check(OLDEST_RESULTS_COLLECTION_NAME)
+create_result(PREVIOUS_WEEKLY_COLLECTION_NAME)
+create_result(LATEST_RESULTS_COLLECTION_NAME)
+create_result(OLDEST_RESULTS_COLLECTION_NAME)
 
 
 client = MongoClient()
@@ -46,7 +42,7 @@ if __name__ == '__main__':
     map_subtract_function = Code(open(join(ROOT, AGGREGATION_MAP_SUBTRACT_FUNCTION), 'r').read())
     reduce_function = Code(open(join(ROOT, AGGREGATION_REDUCE_FUNCTION), 'r').read())
 
-    previous_week_collection.map_reduce(map_add_function, reduce_function, {'reduce': NEW_WEEKLY_COLLECTION_NAME})
+    previous_week_collection.map_reduce(map_add_function, reduce_function, NEW_WEEKLY_COLLECTION_NAME)
     latest_result_collection.map_reduce(map_add_function, reduce_function, {'reduce': NEW_WEEKLY_COLLECTION_NAME})
     oldest_result_collection.map_reduce(map_subtract_function, reduce_function, {'reduce': NEW_WEEKLY_COLLECTION_NAME})
 
