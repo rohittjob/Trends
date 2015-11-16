@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" type="text/css"/>
   <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}" type="text/css"/>
   <link rel="stylesheet" href="{% static "css/templatemo-blue.css" %}" type="text/css"/>
-  <link rel="stylesheet" href="{% static "css/d3.css" %}" type="text/css">
 </head>
 
 <style>
@@ -26,8 +25,48 @@
   overflow: none;
   box-shadow: 3px 3px 3px rgba(0,0,0,.5);
 }
-</style>
 
+    text.shadow {
+        stroke: #fff;
+        stroke-width: 2.5px;
+        opacity: 0.9;
+    }
+    path {
+        stroke: steelblue;
+        stroke-width: 2;
+        fill: none;
+    }
+    line {
+        stroke: grey;
+        opacity: 0.5;
+    }
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: grey;
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+    }
+    .grid .tick {
+        stroke: lightgrey;
+        opacity: 0.7;
+    }
+    .grid path {
+        stroke-width: 0;
+    }
+    .area {
+        fill: lightsteelblue;
+        stroke-width: 0;
+    }
+    .overlay {
+        fill: none;
+        pointer-events: all;
+    }
+    .focus circle {
+        fill: green;
+        stroke: steelblue;
+    }
+</style>
 
 <body data-spy="scroll" data-target=".navbar-collapse">
 <h2 style="margin-left : 100px; margin-top : 40px; color : #FFF; font-family: ProximaNova-Bold;"> {{ topic_name }} </h2>
@@ -50,9 +89,9 @@
   </script>
   -  Now
 </p>
+
 <div id="graph">
   <h4 class="accent" style="padding:20px; color: #424242;"><u>Trend for {{ topic_name }} over the past week</u></h4>
-  <svg></svg>
 </div>
 
 <div id="tweets">
@@ -76,120 +115,169 @@
   <div class="floating-box">Related topic 5</div>
   <div class="floating-box">Related topic 6</div>
 </div>
-<!-- javascript js -->  
 
-<script src="{% static "js/v.js" %}"></script>
-<script src="{% static "js/jquery.min.js" %}"></script>
-<script src="{% static "js/nvtooltip.js" %}"></script>
-<script src="{% static "js/legend.js" %}"></script> 
-<script src="{% static "js/line.js" %}"></script> 
-<script src="{% static "js/linewithlegend.js" %}"></script> 
+<script src="{% static "js/area_graph_with_tooltip_js1.js" %}"></script>
+<script src="{% static "js/area_graph_with_tooltip_js2.js" %}"></script>
 
 <script src="{% static "js/jquery.js" %}"></script>
 <script src="{% static "js/bootstrap.min.js" %}"></script>
 <script src="{% static "js/jquery.backstretch.min.js" %}"></script>
 <script src="{% static "js/custom.js" %}"></script>
 <script>
+        var margin = {
+            top: 30,
+            right: 20,
+            bottom: 50,
+            left: 80
+        },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
-function log(text) {
-  if (console && console.log) console.log(text);
-  return text;
-}
+         //Beautify the date
+        var parseDate = d3.time.format("%d-%b-%y").parse;
+        var tooltipDate = d3.time.format("%d/%m/%y");
 
+         //Get the Amount of alerts for tooltip
+        var bisectDate = d3.bisector(function(d) {
+            return d.date;
+        }).left;
 
+        var x = d3.time.scale().range([0, width]);
+        var y = d3.scale.linear().range([height, 0]);
 
-$(document).ready(function() {
-  var margin = {top: 30, right: 10, bottom: 50, left: 60},
-      chart = d3LineWithLegend()
-                .xAxis.label('Date')
-                .width(width(margin))
-                .height(height(margin))
-                .yAxis.label('Usage Frequency');
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .ticks(5);
 
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(5);
 
-  var svg = d3.select('#graph svg')
-      .datum(generateData())
+        var area = d3.svg.area()
+            .x(function(d) {
+                return x(d.date);
+            })
+            .y0(height)
+            .y1(function(d) {
+                return y(d.close);
+            });
 
-  svg.transition().duration(2000)
-      .attr('width', width(margin))
-      .attr('height', height(margin))
-      .call(chart);
+        var valueline = d3.svg.line()
+            .x(function(d) {
+                return x(d.date);
+            })
+            .y(function(d) {
+                return y(d.close);
+            });
 
+        var svg = d3.select("#graph")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  chart.dispatch.on('showTooltip', function(e) {
-  var offset = $('#graph').offset(), // { left: 0, top: 0 }
-        left = e.pos[0] + offset.left,
-        top = e.pos[1] + offset.top,
-        formatter = d3.format(".04f");
+        function make_x_axis() { // function for the x grid lines
+            return d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .ticks(5)
+        }
 
-    var content = '<h5>' + e.series.label + '</h5>' +
-                  '<p>' +
-                  '<span class="value">[' + e.point[0] + ', ' + formatter(e.point[1]) + ']</span>' +
-                  '</p>';
+        function make_y_axis() { // function for the y grid lines
+            return d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .ticks(5)
+        }
 
-    nvtooltip.show([left, top], content);
-  });
+         // Get the data
+        d3.tsv("{% static "data.tsv" %}", function(error, data) {
+            data.forEach(function(d) {
+                d.date = parseDate(d.date);
+                d.close = +d.close;
+            });
+            
+            // Sort the data or bisect() won't work right
+            data.sort(function(a, b) {return a.date - b.date;});
 
-  chart.dispatch.on('hideTooltip', function(e) {
-    nvtooltip.cleanup();
-  });
+            // Scale the range of the data
+            x.domain(d3.extent(data, function(d) {
+                return d.date;
+            }));
+            y.domain([0, d3.max(data, function(d) {
+                return d.close;
+            })]);
 
+            // Add the filled area
+            svg.append("path")
+                .datum(data)
+                .attr("class", "area")
+                .attr("d", area);
 
+            svg.append("g") // Draw the y Grid lines
+            .attr("class", "grid")
+                .call(make_y_axis()
+                    .tickSize(-width, 0, 0)
+                    .tickFormat("")
+            )
 
+            // Add the valueline path.
+            svg.append("path")
+                .attr("class", "line")
+                .attr("d", valueline(data));
 
-  $(window).resize(function() {
-    var margin = chart.margin();
+            // Add the X Axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
 
-    chart
-      .width(width(margin))
-      .height(height(margin));
+            // Add the Y Axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
 
-    d3.select('#graph svg')
-      .attr('width', width(margin))
-      .attr('height', height(margin))
-      .call(chart);
+            // Tooltip
+            var focus = svg.append("g")
+                .attr("class", "focus")
+                .style("display", "none");
 
-    });
+            focus.append("circle")
+                .attr("r", 4.5);
 
+            focus.append("text")
+                .attr("x", 9)
+                .attr("dy", ".35em");
 
+            svg.append("rect")
+                .attr("class", "overlay")
+                .attr("width", width)
+                .attr("height", height)
+                .on("mouseover", function() {
+                    focus.style("display", null);
+                })
+                .on("mouseout", function() {
+                    focus.style("display", "none");
+                })
+                .on("mousemove", mousemove);
 
+            function mousemove() {
+                var x0 = x.invert(d3.mouse(this)[0]),
+                    i = bisectDate(data, x0, 1),
+                    d0 = data[i - 1],
+                    d1 = data[i],
+                    d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+                focus.attr("transform", "translate(" + x(d.date) + "," + y(d.close) + ")");
+                focus.select("text").text(Math.floor(d.close) + '   ' + tooltipDate(d.date));
+            }
+            // End Tooltip
+        });
+    </script>
 
-  function width(margin) {
-    var w = $(window).width() - 300;
-
-    return ( (w - margin.left - margin.right - 20) < 0 ) ? margin.left + margin.right + 2 : w;
-  }
-
-  function height(margin) {
-    var h = $(window).height() - 200;
-
-    return ( h - margin.top - margin.bottom - 20 < 0 ) ? 
-              margin.top + margin.bottom + 2 : h;
-  }
-
-
-  //data
-  function generateData() {
-    var freq = [];
-
-    for (var i = 0; i < 169; i++) {
-      freq.push([ i/24, Math.random()]);
-    }
-
-    return [
-      {
-        data: freq,
-        label: "Number of tweets"
-      }
-    ];
-  }
-
-});
-
-
-</script>
-
-<!-- footer section -->
+    <!-- footer section -->
 <footer>
   <div class="container">
     <div class="row">
