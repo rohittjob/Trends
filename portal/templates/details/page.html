@@ -33,7 +33,7 @@
     }
     path {
         stroke: steelblue;
-        stroke-width: 2;
+        stroke-width: 3;
         fill: none;
     }
     line {
@@ -64,7 +64,7 @@
     }
     .focus circle {
         fill: green;
-        stroke: steelblue;
+        stroke: white;
     }
 </style>
 
@@ -94,19 +94,15 @@
   <h4 class="accent" style="padding:20px; color: #424242;"><u>Trend for {{ topic_name }} over the past week</u></h4>
 </div>
 
+<!-- Displaying live tweets for the topic-->
 <div id="tweets">
   <h4 class="accent" style="padding:20px; color: #424242;"><u>Top tweets for {{ topic_name }}</u></h4>
-  <ul>
-      <li style="padding:10px;">Tweet 1</li><hr>
-      <li style="padding:10px;">Tweet 2</li><hr>
-      <li style="padding:10px;">Tweet 3</li><hr>
-      <li style="padding:10px;">Tweet 4</li><hr>
-      <li style="padding:10px;">Tweet 5</li><hr>
-  </ul>
+  <a class="twitter-timeline" href="https://twitter.com/hashtag/corgi" data-widget-id="666481458479890433">#corgi Tweets</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </div>
 
+<!-- Related Topics list-->
 <h4 class="accent" style="margin-left: 100px; margin-top: 30px; color: #424242;">Related topics</h4>
-
 <div style="margin-left: 85px; margin-right: 85px;">
   <div class="floating-box">Related topic 1</div>
   <div class="floating-box">Related topic 2</div>
@@ -125,12 +121,12 @@
 <script src="{% static "js/custom.js" %}"></script>
 <script>
         var margin = {
-            top: 30,
-            right: 20,
-            bottom: 50,
+            top: 40,
+            right: 80,
+            bottom: 40,
             left: 80
         },
-        width = 960 - margin.left - margin.right,
+        width = 1150 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
          //Beautify the date
@@ -246,11 +242,11 @@
                 .style("display", "none");
 
             focus.append("circle")
-                .attr("r", 4.5);
+                .attr("r", 6.5);
 
             focus.append("text")
-                .attr("x", 9)
-                .attr("dy", ".35em");
+                .attr("x", -40)
+                .attr("dy", -30);
 
             svg.append("rect")
                 .attr("class", "overlay")
@@ -271,7 +267,7 @@
                     d1 = data[i],
                     d = x0 - d0.date > d1.date - x0 ? d1 : d0;
                 focus.attr("transform", "translate(" + x(d.date) + "," + y(d.close) + ")");
-                focus.select("text").text(Math.floor(d.close) + '   ' + tooltipDate(d.date));
+                focus.select("text").text(Math.floor(d.close) + ' tweets on ' + tooltipDate(d.date));
             }
             // End Tooltip
         });
