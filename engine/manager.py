@@ -1,10 +1,13 @@
 import subprocess
 from multiprocessing import Process, Value
-from engine.utilities.time_management import *
-from engine.utilities.os_util import *
-from engine.utilities.constants import *
-from engine.utilities.config import *
 from os import remove
+
+from utilities.config import *
+from utilities.os_util import *
+from utilities.time_management import *
+from utilities.constants import *
+
+import psutil
 
 TODAY = get_today()
 TOMORROW = get_next_day(TODAY)
@@ -12,11 +15,13 @@ STOP_TIME = None
 RESTART_TIME = None
 
 ROOT = get_dir(__file__)
+PROJECT_ROOT = dirname(ROOT)
 
 EXTRACTOR_SCRIPT_PATH = join(ROOT, EXTRACTOR_DIR, EXTRACTOR)
 EXTRACTOR_DATA_PATH = join(ROOT, EXTRACTOR_DIR, EXTRACTOR_DATA_DIR)
 PROCESS_SCRIPT_PATH = join(ROOT, PROCESSOR_DIR, PROCESSOR)
-WEEKLY_PROCESS_SCRIPT_PATH = join(ROOT, PROCESSOR_DIR, WEEKLY_AGGREGATOR)
+WEEKLY_PROCESS_SCRIPT_PATH = join(ROOT, PROCESSOR_DIR, WEEKLY_PROCESSOR)
+PORTAL_PROCESS_SCRIPT_PATH = join(PROJECT_ROOT, WEBSITE_DIR, DJANGO_MANAGER)
 
 
 def cleanup():
@@ -61,9 +66,21 @@ def data_weekly_process():
     print 'Starting Weekly Processor... ',
     weekly_processor = subprocess.Popen(['python', WEEKLY_PROCESS_SCRIPT_PATH])
     print 'Started with PID ' + str(weekly_processor.pid)
+    return weekly_processor
+
+
+def start_portal():
+    print 'Starting Django Manager... ',
+    django_manager = subprocess.Popen(['python', PORTAL_PROCESS_SCRIPT_PATH, RUNSERVER_COMMAND], creationflags=subprocess.CREATE_NEW_CONSOLE)
+    print 'Started with PID ' + str(django_manager.pid)
+    return django_manager
 
 
 if __name__ == '__main__':
+
+    weekly_subprocess = None
+    portal_subprocess = None
+
     while True:  # run everyday
         STOP_TIME = get_datetime_from_string(TODAY, STOP_DATA_EXTRACTION_TIME)
         RESTART_TIME = get_datetime_from_string(TOMORROW, RESTART_DATA_EXTRACTION_TIME)
@@ -76,18 +93,31 @@ if __name__ == '__main__':
 
         processor.start()
 
+        if weekly_subprocess:
+            weekly_subprocess.wait()
+
+        portal_subprocess = start_portal()
+
         alarm(MANAGER, STOP_TIME)
 
-        extractor.terminate()
+        kill_process_tree(extractor.pid)
         cleanup()
 
         stop_processor.value = 1
         processor.join()
         print 'Processor exiting...'
 
-        data_weekly_process()
+        print 'Stopping portal... ',
+        kill_process_tree(portal_subprocess.pid)
+        print 'Stopped'
+        weekly_subprocess = data_weekly_process()
 
-        alarm(MANAGER, RESTART_TIME)
+        if DEBUG:
+            weekly_subprocess.wait()
+            break
+
+
+        # alarm(MANAGER, RESTART_TIME)
         print 'Restarting scripts!!! '
         TODAY = TOMORROW
         TOMORROW = get_next_day(TODAY)

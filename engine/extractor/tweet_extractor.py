@@ -1,13 +1,15 @@
 # Import the necessary methods from tweepy library
-from tweepy.streaming import StreamListener
+from os import rename
+
+from utilities.config import *
+from utilities.miscellaneous import is_json
+from utilities.os_util import *
+from utilities.constants import *
+from utilities.time_management import get_time
 from tweepy import OAuthHandler
 from tweepy import Stream
-from os import rename
-from engine.utilities.os_util import *
-from engine.utilities.config import *
-from engine.utilities.constants import *
-from engine.utilities.time_management import get_time
-from engine.utilities.miscellaneous import is_json
+from tweepy.streaming import StreamListener
+
 
 # Variables that contains the user credentials to access Twitter API
 access_token = "2583390259-eRijiycaorQHFeVGTI2YNfT6kc9JWtNSOdwlfnR"

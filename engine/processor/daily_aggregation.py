@@ -1,10 +1,12 @@
-from pymongo import MongoClient
-from bson.code import Code
-from engine.utilities.constants import *
-from engine.utilities.time_management import *
-from engine.utilities.os_util import *
-from engine.utilities.mongo import *
 from os.path import join
+
+from bson.code import Code
+from utilities.mongo import *
+from utilities.os_util import *
+from utilities.time_management import *
+from utilities.constants import *
+from pymongo import MongoClient
+
 
 ROOT = get_dir(__file__)
 
@@ -13,8 +15,8 @@ TODAY = get_today()
 COLLECTION_NAME = RAW_COLLECTION + get_date_string(TODAY)
 RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + get_date_string(TODAY)
 
-create_raw(TEMP_RAW_COLLECTION)
-create_raw(COLLECTION_NAME)
+create_raw(TWEETS_DB, TEMP_RAW_COLLECTION)
+create_raw(TWEETS_DB, COLLECTION_NAME)
 create_result(TWEETS_DB, TEMP_RESULTS_COLLECTION)
 
 client = MongoClient()

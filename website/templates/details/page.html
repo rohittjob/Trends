@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<head>
+  <meta charset="utf-8">
+  <title>Details</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+
+  <!-- stylesheet css -->
+
+  <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/templatemo-blue.css" %}" type="text/css"/>
+</head>
+
+<style>
+#graph, #tweets{
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 30px;
+  background: #FFF;
+  padding: 10;
+  overflow: none;
+  box-shadow: 3px 3px 3px rgba(0,0,0,.5);
+}
+
+    text.shadow {
+        stroke: #fff;
+        stroke-width: 2.5px;
+        opacity: 0.9;
+    }
+    path {
+        stroke: steelblue;
+        stroke-width: 3;
+        fill: none;
+    }
+    line {
+        stroke: grey;
+        opacity: 0.5;
+    }
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: grey;
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+    }
+    .grid .tick {
+        stroke: lightgrey;
+        opacity: 0.7;
+    }
+    .grid path {
+        stroke-width: 0;
+    }
+    .area {
+        fill: lightsteelblue;
+        stroke-width: 0;
+    }
+    .overlay {
+        fill: none;
+        pointer-events: all;
+    }
+    .focus circle {
+        fill: green;
+        stroke: white;
+    }
+</style>
+
+<body data-spy="scroll" data-target=".navbar-collapse">
+<h2 style="margin-left : 100px; margin-top : 40px; color : #FFF; font-family: ProximaNova-Bold;"> {{ topic_name }} </h2>
+<p style="margin-left : 115px; color : #FFF; margin-bottom : 25px;">
+  <script>
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth(); //January is 0!
+    var yyyy = today.getFullYear();
+    var months = [ "January", "February", "March", "April", "May", "June", 
+               "July", "August", "September", "October", "November", "December" ];
+    var month = months[mm];
+
+    if(dd<10) {
+      dd='0'+dd
+    } 
+
+    today = month+' '+dd+', '+yyyy;
+    document.write(today);
+  </script>
+  -  Now
+</p>
+
+<div id="graph">
+  <h4 class="accent" style="padding:20px; color: #424242;"><u>Trend for {{ topic_name }} over the past week</u></h4>
+</div>
+
+<!-- Displaying live tweets for the topic-->
+<div id="tweets">
+  <h4 class="accent" style="padding:20px; color: #424242;"><u>Top tweets for {{ topic_name }}</u></h4>
+  <a class="twitter-timeline" href="https://twitter.com/hashtag/MTVStars" data-widget-id="666481458479890433" >#corgi Tweets</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<!-- Related Topics list-->
+<h4 class="accent" style="margin-left: 100px; margin-top: 30px; color: #424242;">Related topics</h4>
+<div style="margin-left: 85px; margin-right: 85px;">
+  <div class="floating-box">Related topic 1</div>
+  <div class="floating-box">Related topic 2</div>
+  <div class="floating-box">Related topic 3</div>
+  <div class="floating-box">Related topic 4</div>
+  <div class="floating-box">Related topic 5</div>
+  <div class="floating-box">Related topic 6</div>
+</div>
+
+<script src="{% static "js/area_graph_with_tooltip_js1.js" %}"></script>
+<script src="{% static "js/area_graph_with_tooltip_js2.js" %}"></script>
+
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/jquery.backstretch.min.js" %}"></script>
+<script src="{% static "js/custom.js" %}"></script>
+<script>
+        var margin = {
+            top: 40,
+            right: 80,
+            bottom: 40,
+            left: 80
+        },
+        width = 1150 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+         //Beautify the date
+        var parseDatetime = d3.time.format("%d-%m-%Y %H:%M").parse;
+        var tooltipDate = d3.time.format("%d-%m-%Y %H:%M");
+
+         //Get the Amount of alerts for tooltip
+        var bisectDate = d3.bisector(function(d) {
+            return d.datetime;
+        }).left;
+
+        var x = d3.time.scale().range([0, width]);
+        var y = d3.scale.linear().range([height, 0]);
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .ticks(5);
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(5);
+
+        var area = d3.svg.area()
+            .x(function(d) {
+                return x(d.datetime);
+            })
+            .y0(height)
+            .y1(function(d) {
+                return y(d.count);
+            });
+
+        var valueline = d3.svg.line()
+            .x(function(d) {
+                return x(d.datetime);
+            })
+            .y(function(d) {
+                return y(d.count);
+            });
+
+        var svg = d3.select("#graph")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        function make_x_axis() { // function for the x grid lines
+            return d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .ticks(5)
+        }
+
+        function make_y_axis() { // function for the y grid lines
+            return d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .ticks(5)
+        }
+
+         // Get the data
+        d3.tsv("{% static tsv_name %}", function(error, data) {
+            data.forEach(function(d) {
+                d.datetime = parseDatetime(d.datetime);
+                d.count = +d.count;
+            });
+            
+            // Sort the data or bisect() won't work right
+            data.sort(function(a, b) {return a.datetime - b.datetime;});
+
+            // Scale the range of the data
+            x.domain(d3.extent(data, function(d) {
+                return d.datetime;
+            }));
+            y.domain([0, d3.max(data, function(d) {
+                return d.count;
+            })]);
+
+            // Add the filled area
+            svg.append("path")
+                .datum(data)
+                .attr("class", "area")
+                .attr("d", area);
+
+            svg.append("g") // Draw the y Grid lines
+            .attr("class", "grid")
+                .call(make_y_axis()
+                    .tickSize(-width, 0, 0)
+                    .tickFormat("")
+            )
+
+            // Add the valueline path.
+            svg.append("path")
+                .attr("class", "line")
+                .attr("d", valueline(data));
+
+            // Add the X Axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            // Add the Y Axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+
+            // Tooltip
+            var focus = svg.append("g")
+                .attr("class", "focus")
+                .style("display", "none");
+
+            focus.append("circle")
+                .attr("r", 6.5);
+
+            focus.append("text")
+                .attr("x", -40)
+                .attr("dy", -30);
+
+            svg.append("rect")
+                .attr("class", "overlay")
+                .attr("width", width)
+                .attr("height", height)
+                .on("mouseover", function() {
+                    focus.style("display", null);
+                })
+                .on("mouseout", function() {
+                    focus.style("display", "none");
+                })
+                .on("mousemove", mousemove);
+
+            function mousemove() {
+                var x0 = x.invert(d3.mouse(this)[0]),
+                    i = bisectdatetime(data, x0, 1),
+                    d0 = data[i - 1],
+                    d1 = data[i],
+                    d = x0 - d0.datetime > d1.datetime - x0 ? d1 : d0;
+                focus.attr("transform", "translate(" + x(d.datetime) + "," + y(d.count) + ")");
+                focus.select("text").text(Math.floor(d.count) + ' tweets on ' + tooltipdatetime(d.datetime));
+            }
+            // End Tooltip
+        });
+    </script>
+
+    <!-- footer section -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-sm-12" style="color:#3366CC;">
+        <p>Created by students of MNNIT Allahabad</p>
+        <ul class="social-icons">
+          <li><a href="#" class="fa fa-facebook"></a></li>
+          <li><a href="#" class="fa fa-twitter"></a></li>
+          <li><a href="#" class="fa fa-github"></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

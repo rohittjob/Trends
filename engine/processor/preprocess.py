@@ -1,13 +1,13 @@
-from engine.utilities.os_util import *
-from engine.utilities.miscellaneous import check_percent
-from engine.utilities.time_management import *
-from engine.utilities.mongo import *
-from engine.utilities.constants import *
-
-from pymongo import MongoClient
-from os import remove
-import pytz
 import json
+from os import remove
+
+import pytz
+from utilities.miscellaneous import check_percent
+from utilities.mongo import *
+from utilities.os_util import *
+from utilities.time_management import *
+from utilities.constants import *
+from pymongo import MongoClient
 
 
 ROOT = dirname(get_dir(__file__))
@@ -36,7 +36,7 @@ def extract_data(file_path):  # load json file into a list of dictionaries
 
 def extract_time(date):
     date = datetime.strptime(date, DATETIME_FORMAT)
-    date.replace(tzinfo=pytz.UTC)
+    date = date.replace(tzinfo=pytz.UTC)
     return date
 
 

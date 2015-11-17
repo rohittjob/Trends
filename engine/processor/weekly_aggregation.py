@@ -1,27 +1,27 @@
 from bson.code import Code
-from engine.utilities.time_management import *
-from engine.utilities.os_util import *
-from engine.utilities.mongo import *
-from engine.utilities.constants import *
+from utilities.mongo import *
+from utilities.os_util import *
+from utilities.time_management import *
+from utilities.constants import *
 from pymongo import MongoClient
-from os.path import join
+
 
 ROOT = get_dir(__file__)
 
 TODAY = get_today()
-WEEK_START = TODAY - timedelta(days=7)
-NEW_WEEK_START = WEEK_START + timedelta(days=1)
+NEW_WEEK_START = get_week_start(TODAY)
+OLD_WEEK_START = get_prev_day(NEW_WEEK_START)
 
 
-PREVIOUS_WEEKLY_COLLECTION_NAME = WEEKLY_RESULTS_COLLECTION + get_date_string(WEEK_START)
+PREVIOUS_WEEKLY_COLLECTION_NAME = WEEKLY_RESULTS_COLLECTION + get_date_string(OLD_WEEK_START)
 NEW_WEEKLY_COLLECTION_NAME = WEEKLY_RESULTS_COLLECTION + get_date_string(NEW_WEEK_START)
 LATEST_RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + get_date_string(TODAY)
-OLDEST_RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + get_date_string(WEEK_START)
+OLDEST_RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + get_date_string(OLD_WEEK_START)
 
 
-create_result(PREVIOUS_WEEKLY_COLLECTION_NAME)
-create_result(LATEST_RESULTS_COLLECTION_NAME)
-create_result(OLDEST_RESULTS_COLLECTION_NAME)
+create_result(TWEETS_DB, PREVIOUS_WEEKLY_COLLECTION_NAME)
+create_result(TWEETS_DB, LATEST_RESULTS_COLLECTION_NAME)
+create_result(TWEETS_DB, OLDEST_RESULTS_COLLECTION_NAME)
 
 
 client = MongoClient()

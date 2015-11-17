@@ -1,8 +1,8 @@
 import subprocess
-from engine.utilities.os_util import *
-from engine.utilities.constants import *
-from engine.utilities.time_management import get_time
 
+from utilities.os_util import *
+from utilities.time_management import get_time
+from utilities.constants import *
 
 ROOT = get_dir(__file__)
 

@@ -1,10 +1,10 @@
-from engine.utilities.constants import *
-from engine.utilities.os_util import *
-from engine.utilities.config import PYTHON_VERSION
-from os.path import join, exists
 import platform
 import subprocess
+from os.path import join, exists
 
+from utilities.config import PYTHON_VERSION
+from utilities.os_util import *
+from utilities.constants import *
 
 ROOT = get_dir(__file__)
 
@@ -73,4 +73,4 @@ if __name__ == '__main__':
     engine = subprocess.Popen(['python', ENGINE_PATH])
     print 'Started'
     engine.wait()
-    mongo.wait()
+    kill_process_tree(mongo.pid)
