@@ -1,5 +1,13 @@
 from datetime import timedelta
 
+
+# Variables that contains the user credentials to access Twitter API
+
+ACCESS_TOKEN = "2583390259-eRijiycaorQHFeVGTI2YNfT6kc9JWtNSOdwlfnR"
+ACCESS_TOKEN_SECRET = "IWhMPVdw9sdSJ4ex20ObFgS2BbGLxo3nWHyqp4sy4Bga2"
+CONSUMER_KEY = "SVI97pI1bbxjHOevoGoyCUH5X"
+CONSUMER_SECRET = "anAQ83bkPT7JmIEvPssQ8CbP2tUmADq9Jn68VdHg1HiROcoJr2"
+
 # General
 
 PYTHON_VERSION = '2.7.10'

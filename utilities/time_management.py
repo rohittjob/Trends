@@ -73,8 +73,17 @@ def get_date_time_string(datetime_obj):
     return datetime_obj.strftime('%d-%m-%Y %H:%M')
 
 
+def get_tweet_date_time_string(datetime_obj):
+    return datetime_obj.strftime('%b %d %H:%M')
+
+
 def get_week_start(obj):
     return obj - timedelta(days=(WEEK_RANGE - 1))
+
+
+def convert_datetime_to_local(obj):
+    tz = pytz.timezone(TIMEZONE)
+    return obj.astimezone(tz)
 
 # %%%%%%%%%%%%%%%%%%%%%%%%% EXECUTION TIME FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

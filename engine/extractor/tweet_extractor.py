@@ -11,11 +11,6 @@ from tweepy import Stream
 from tweepy.streaming import StreamListener
 
 
-# Variables that contains the user credentials to access Twitter API
-access_token = "2583390259-eRijiycaorQHFeVGTI2YNfT6kc9JWtNSOdwlfnR"
-access_token_secret = "IWhMPVdw9sdSJ4ex20ObFgS2BbGLxo3nWHyqp4sy4Bga2"
-consumer_key = "SVI97pI1bbxjHOevoGoyCUH5X"
-consumer_secret = "anAQ83bkPT7JmIEvPssQ8CbP2tUmADq9Jn68VdHg1HiROcoJr2"
 
 
 FILESIZE_LIMIT = MAX_TWEETS_IN_FILE
@@ -93,8 +88,8 @@ if __name__ == '__main__':
             # This handles Twitter authentication and the connection to Twitter Streaming API
 
             l = StdOutListener()
-            auth = OAuthHandler(consumer_key, consumer_secret)
-            auth.set_access_token(access_token, access_token_secret)
+            auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+            auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
             stream = Stream(auth, l)
 
             # This line filter Twitter Streams to capture data by the top 20 most used keywords from the following URL:

@@ -3,6 +3,8 @@
 
 data*.json
 engine/MongoDB/*
+utilities/mongod.py
+
 
 # PyCharms workspace config file
 

@@ -10,12 +10,16 @@
 
   <!-- stylesheet css -->
 
-  <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" type="text/css"/>
+
   <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}" type="text/css"/>
   <link rel="stylesheet" href="{% static "css/templatemo-blue.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/recent-tweets.css" %}" type="text/css"/>
 </head>
 
 <style>
+
+
+
 #graph, #tweets{
   margin-left: 100px;
   margin-right: 100px;
@@ -70,36 +74,62 @@
 
 <body data-spy="scroll" data-target=".navbar-collapse">
 <h2 style="margin-left : 100px; margin-top : 40px; color : #FFF; font-family: ProximaNova-Bold;"> {{ topic_name }} </h2>
-<p style="margin-left : 115px; color : #FFF; margin-bottom : 25px;">
-  <script>
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth(); //January is 0!
-    var yyyy = today.getFullYear();
-    var months = [ "January", "February", "March", "April", "May", "June", 
-               "July", "August", "September", "October", "November", "December" ];
-    var month = months[mm];
 
-    if(dd<10) {
-      dd='0'+dd
-    } 
-
-    today = month+' '+dd+', '+yyyy;
-    document.write(today);
-  </script>
-  -  Now
-</p>
 
 <div id="graph">
   <h4 class="accent" style="padding:20px; color: #424242;"><u>Trend for {{ topic_name }} over the past week</u></h4>
 </div>
 
+
+
 <!-- Displaying live tweets for the topic-->
 <div id="tweets">
   <h4 class="accent" style="padding:20px; color: #424242;"><u>Top tweets for {{ topic_name }}</u></h4>
-  <a class="twitter-timeline" href="https://twitter.com/hashtag/MTVStars" data-widget-id="666481458479890433" >#corgi Tweets</a>
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+   <!-- MAIN BODY -->
+  
+  
+            
+
+                        <table cellspacing="0" cellpadding="0" border="0" width="500" class="responsive-table">
+                            
+                            
+                            <tr>
+                                <td align="left">
+                                <!-- LIVE DYNAMIC TWEETS IN AN EMAIL AWW YISSS -->
+                                <!-- TWEET #TEDC15 TO SEE YOUR TWEET APPEAR IN THE STREAM! -->
+                                <!-- THIS ENTIRE SECTION SHOWS FOR WEBKIT ONLY, USES DYNAMIC CSS FILE THAT OVERWRITES THE CONTENT PROPERTY FOR EACH EMPTY TWEET DIV - REFER TO THE LINKED STYLESHEET IN THE HEAD TO SEE THE CSS FOR THIS SECTION -->
+                                    
+                                    <div class="wrapper">
+
+                                    {% for tweet in tweets  %}
+                                        <div class="tweet-container" id="tweet-{{ tweet.number }}">
+                                            <a id="url-{{ tweet.number }}" href="https://twitter.com/statuses/{{ tweet.id }}" target="_blank">  
+                                                <div class="tweet slide" id='slide-{{ tweet.number }}'>      
+                                                    <div class="tweet-avatar-wrapper">
+                                                        <div id="dp-url-{{ tweet.number }}" class="avatar" style="background-image: url('{{ tweet.dp_url }}');"></div>
+                                                    </div>
+                                                    <div class="tweet-wrapper">
+                                                        <span class="name" id="name-{{ tweet.number }}">{{ tweet.name }}</span> <span class="handle" id="handle-{{ tweet.number }}"> {{ tweet.handle }}</span>
+                                                        <span class="timestamp" id="timestamp-{{ tweet.number }}">{{ tweet.date }}</span>
+                                                        <span class="copy" id="text-{{ tweet.number }}"> {{ tweet.text }}</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+
+                                    {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    
+            
+            
+
+
 </div>
+
 
 <!-- Related Topics list-->
 <h4 class="accent" style="margin-left: 100px; margin-top: 30px; color: #424242;">Related topics</h4>
@@ -116,9 +146,52 @@
 <script src="{% static "js/area_graph_with_tooltip_js2.js" %}"></script>
 
 <script src="{% static "js/jquery.js" %}"></script>
-<script src="{% static "js/bootstrap.min.js" %}"></script>
 <script src="{% static "js/jquery.backstretch.min.js" %}"></script>
 <script src="{% static "js/custom.js" %}"></script>
+
+<script>
+// script for top tweets
+       
+
+
+    var cur = 5;
+    var cur_str = cur.toString();
+    var since_id = {{ since_id }};
+    
+    setInterval(function(){
+    
+    
+      $.get('/details/tweet/', {keyword: "{{ topic_name }}", since_id: since_id},
+      function(json){
+        $('#name-'+cur_str).text(json.name);
+        $('#handle-'+cur_str).text(json.handle);
+        $('#text-'+cur_str).text(json.text);
+        $('#timestamp-'+cur_str).text(json.date);
+        $('#url-'+cur_str).attr("href", "https://twitter.com/statuses/"+json.tweet_id);
+        $('#dp-url-'+cur_str).css("background-image", "url('" + json.dp_url + "')");
+        $('#tweet-'+cur_str).prependTo('.wrapper');
+
+        cur = cur -1;
+        if(cur ==0) {
+            cur = 5;
+        }
+
+        cur_str = cur.toString();    
+        since_id = json.tweet_id;
+     });
+
+    }, 6000);
+        
+         
+  
+    
+
+
+
+</script>
+
+
+
 <script>
         var margin = {
             top: 40,
@@ -262,12 +335,12 @@
 
             function mousemove() {
                 var x0 = x.invert(d3.mouse(this)[0]),
-                    i = bisectdatetime(data, x0, 1),
+                    i = bisectDate(data, x0, 1),
                     d0 = data[i - 1],
                     d1 = data[i],
                     d = x0 - d0.datetime > d1.datetime - x0 ? d1 : d0;
                 focus.attr("transform", "translate(" + x(d.datetime) + "," + y(d.count) + ")");
-                focus.select("text").text(Math.floor(d.count) + ' tweets on ' + tooltipdatetime(d.datetime));
+                focus.select("text").text(Math.floor(d.count) + ' tweets on ' + tooltipDate(d.datetime));
             }
             // End Tooltip
         });
