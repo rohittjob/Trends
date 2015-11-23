@@ -1,6 +1,6 @@
 from os.path import isfile, dirname, realpath, join, splitext
 from os import listdir
-import psutil
+
 
 def get_dir(filename):
     return dirname(realpath(filename))
@@ -14,7 +14,9 @@ def get_files_in_dir(directory, ext=None):
 
     return files
 
+
 def kill_process_tree(pid):
+    import psutil
     proc = psutil.Process(pid)
     for child in proc.children():
         child.kill()
