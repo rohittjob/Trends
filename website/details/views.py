@@ -17,7 +17,10 @@ def detail(request, type, rank):
         context['topic_name'] = mention
     
     context['tweets'] = get_tweets(context['topic_name'], 5)
-    context['since_id'] = context['tweets'][0].id
+    if len(context['tweets']) > 0:
+        context['since_id'] = context['tweets'][0].id
+    else:
+        context['since_id'] = ''
     context['tsv_name'] = 'tsv/' + context['tsv_name'] + '.tsv'
     return render(request, 'details/page.html', context)
 

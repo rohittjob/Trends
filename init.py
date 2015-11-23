@@ -1,6 +1,6 @@
 import platform
 import subprocess
-from os.path import join, exists
+from os.path import exists
 
 from utilities.config import PYTHON_VERSION
 from utilities.os_util import *
