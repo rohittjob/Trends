@@ -87,8 +87,9 @@
 
             .wrapper {
                 position: relative;
-                height: 400px;
+                height: 500px;
                 overflow: hidden;
+
             }
 
             .wrapper::after {
@@ -110,7 +111,7 @@
                 width: 450px;
                 border-radius: 4px;
                 padding: 20px;
-                margin: 5px auto;
+                margin-left: 100px;
                 display: table;
                 border: 3px solid #333333;
                 position: relative;
@@ -126,6 +127,7 @@
             .tweet-container { 
               overflow: hidden;
               position: relative;
+              margin: 0 auto;
             }
 
             
