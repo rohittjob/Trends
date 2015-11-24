@@ -47,4 +47,5 @@ if __name__ == '__main__':
     oldest_result_collection.map_reduce(map_subtract_function, reduce_function, {'reduce': NEW_WEEKLY_COLLECTION_NAME})
 
     print 'Finished'
+    client.close()
     stop()

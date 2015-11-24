@@ -43,6 +43,6 @@ if __name__ == '__main__':
         coll.insert_many(temp_raw.find())
     temp_results.drop()
     temp_raw.drop()
-
+    client.close()
     print 'Finished'
     stop()

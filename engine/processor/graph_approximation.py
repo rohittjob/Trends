@@ -100,6 +100,7 @@ if __name__ == '__main__':
         print 'Generating data points for ' + entity + '... ',
         generate_graph_data(entity)
         print 'Done'
+    client.close()
 
 
 
