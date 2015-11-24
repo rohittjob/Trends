@@ -101,7 +101,7 @@ if __name__ == '__main__':
         collection.insert_many(new_data)
         remove(file_path)
         completed_percentage = check_percent(cnt, l, 5, completed_percentage)
-
+    client.close()
     print
     print 'Finished'
     stop()

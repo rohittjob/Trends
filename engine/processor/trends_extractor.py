@@ -48,5 +48,6 @@ if __name__ == '__main__':
                 TopUserMentions(mentioned_user=result, rank=mention_count).save()
             elif hash_count == 5:
                 break
+    client.close()
 
     print 'Done'
