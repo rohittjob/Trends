@@ -16,7 +16,7 @@ def detail(request, type, rank):
         context['tsv_name'] = 'M_' + mention[1:].lower()
         context['topic_name'] = mention
     
-    context['tweets'] = get_tweets(context['topic_name'], 5)
+    context['tweets'] = get_tweets(context['topic_name'], 6)
     if len(context['tweets']) > 0:
         context['since_id'] = context['tweets'][0].id
     else:
@@ -26,7 +26,10 @@ def detail(request, type, rank):
 
 def tweet(request):
     keyword = request.GET['keyword']
-    since_id = int(request.GET['since_id'])
+    try:
+        since_id = int(request.GET['since_id'])
+    except:
+        since_id = None
     tweet = get_tweets(keyword, 1, since_id)
     reply = {}
 

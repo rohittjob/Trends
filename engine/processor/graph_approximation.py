@@ -72,7 +72,7 @@ def generate_graph_data_for_day(entity, coll_name, day, next_day_start, writer):
     upper = lower + APPROXIMATION_RANGE
     while upper <= next_day_start:
         tweet_count = coll.find({ENTITIES: entity, TIMESTAMP: {GREATER_THAN_OR_EQUAL: lower, LESS_THAN: upper}}).count()
-        make_entry(writer, lower, tweet_count)
+        make_entry(writer, lower, tweet_count*100)
         lower += APPROXIMATION_RANGE
         upper += APPROXIMATION_RANGE
 

@@ -7,7 +7,6 @@ from utilities.os_util import *
 from utilities.time_management import *
 from utilities.constants import *
 
-import psutil
 
 TODAY = get_today()
 TOMORROW = get_next_day(TODAY)
@@ -116,8 +115,7 @@ if __name__ == '__main__':
             weekly_subprocess.wait()
             break
 
-
-        # alarm(MANAGER, RESTART_TIME)
+        alarm(MANAGER, RESTART_TIME)
         print 'Restarting scripts!!! '
         TODAY = TOMORROW
         TOMORROW = get_next_day(TODAY)
