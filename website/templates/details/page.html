@@ -45,7 +45,7 @@
   margin-right: 100px;
   margin-top: 30px;
   background: #FFF;
-  padding: 10;
+  padding: 150;
   overflow: none;
   box-shadow: 3px 3px 3px rgba(0,0,0,.5);
   float: right;
@@ -107,7 +107,7 @@
 <div id="container">
 <!-- Displaying live tweets for the topic-->
 <div id="tweets">
-  <h4 class="accent" style="padding:20px; color: #424242;"><u>Top tweets for {{ topic_name }}</u></h4>
+  <h4 class="accent" style="padding:20px; color: #424242;"><u>Live tweets for {{ topic_name }}</u></h4>
    <!-- MAIN BODY -->
   
   
@@ -210,10 +210,10 @@
 
 <script>
         var margin = {
-            top: 40,
-            right: 80,
-            bottom: 40,
-            left: 80
+            top: 35,
+            right: 100,
+            bottom: 60,
+            left: 150
         },
         width = 1150 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -334,8 +334,23 @@
                 .attr("r", 6.5);
 
             focus.append("text")
-                .attr("x", -40)
-                .attr("dy", -30);
+                .attr("x", -150)
+                .attr("dy", -20);
+
+            svg.append("text")      // text label for the x axis
+                .attr("x", width/2)
+                .attr("y",  height+50 )
+                .style("text-anchor", "middle")
+                .text("Date");
+
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left+40)
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Number of tweets");
+
 
             svg.append("rect")
                 .attr("class", "overlay")
@@ -356,7 +371,7 @@
                     d1 = data[i],
                     d = x0 - d0.datetime > d1.datetime - x0 ? d1 : d0;
                 focus.attr("transform", "translate(" + x(d.datetime) + "," + y(d.count) + ")");
-                focus.select("text").text(Math.floor(d.count) + ' tweets on ' + tooltipDate(d.datetime));
+                focus.select("text").text(Math.floor(d.count) + ' tweets on \n' + tooltipDate(d.datetime));
             }
             // End Tooltip
         });
