@@ -82,7 +82,7 @@
 	<div class="row">
 		<div  class="col-md-6 col-sm-12" >
 			<div class="about" style="height: 350px;margin-top: 50px;">
-				<h2 class="accent" style="padding-bottom:20px;margin-top:30px;font-family: 'ProximaNova-Regular';">Info</h2>
+				<h2 class="accent" style="padding-bottom:20px;margin-top:30px;font-family: 'ProximaNova-Regular';color: #3366CC;">Info</h2>
 			<p>
 				Want to know which are the most popular topics people are talking about??
 			</p>
@@ -120,7 +120,7 @@
 <!-- hashtags and topics -->
 <section class="container">
 
-<div style="margin:left: 100px; margin-top:20px; padding-bottom: 15px; font-family: 'ProximaNova-Bold'; font-size: 36px; width: 250px; text-align:center;">Trending Topics</div>
+<div style="margin:left: 100px; margin-top:20px; padding-bottom: 15px; font-family: 'ProximaNova-Bold'; font-size: 36px; width: 250px; text-align:center;"></div>
 	<div class="row">
 		<div class="col-md-8 col-sm-12">
 			<div class="hashtags" style="height: 450px;font-family: 'ProximaNova-Regular'; font-size:20px;">
@@ -134,7 +134,7 @@
 		</div>
 		<div class="col-md-4 col-sm-12" >
 			<div class="topics" style="height: 450px;">
-				<h2 class="accent" style="font-family: 'ProximaNova-Regular';">User Mentions</h2>
+				<h2 class="accent" style="font-family: 'ProximaNova-Regular';color:	#3366CC;">User Mentions</h2>
 					<ul>
 						{% for  mention in mentions %} 
 						<li > <a href="{% url 'detail' 'm' mention.rank %}"> {{ mention.mentioned_user }} </a></li>
