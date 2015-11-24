@@ -39,7 +39,6 @@ h2 {
 }
 
 .container-1 input#search{
-  width: 700px;
   height: 50px;
   background: #FFFFE0;
   border: none;
@@ -74,7 +73,7 @@ h2 {
   margin-left: 14px;
   margin-top: 202px;
   z-index: 1;
-  color: #4f5b66;
+  color: #FFFACD;
  
    -webkit-transition: all .55s ease;
   -moz-transition: all .55s ease;
@@ -83,7 +82,27 @@ h2 {
   transition: all .55s ease;
 }
 
+.navbar-inverse{
+  height:60px;
+  background:#002E94; 
+  box-shadow: 0px 1px 5px rgba(50,50,50,0.08);
+  border-radius: 0;
+  width: 100%;
+  margin-left: 0px;
+  padding-left: 0px;
+}
 
+.navbar-form .input-group{
+  padding-left : 20px;
+  padding-top:5px; 
+  margin-right: 100px;
+
+}
+.navbar-form .input-group .form-control{
+  background-color:#F2F5FC ;
+  width: 1100px;
+  padding-left: 20px;
+}
  
 
 .accent {
@@ -141,6 +160,7 @@ h2 {
 .contact, .experience {
   padding: 40px;
   min-height: 330px;
+  box-shadow: 3px 3px 3px rgba(0,0,0,.3);
 }
 
 .hashtags, .topics,
@@ -240,7 +260,7 @@ header hr {
 /* about section */
 .about {
   background: #fff;
-  box-shadow: 0px 1px 5px rgba(50,50,50,0.08);
+  box-shadow: 3px 3px 3px rgba(0,0,0,.3);
 }
 
 /* Interests section */
@@ -290,7 +310,7 @@ header hr {
 /* topics section */
 .topics {
   background: #fff;
- box-shadow: 0px 1px 5px rgba(50,50,50,0.08);
+  box-shadow: 3px 3px 3px rgba(0,0,0,.3);
 }
 .topics ol {
   padding: 10px;

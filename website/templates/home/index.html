@@ -16,6 +16,34 @@
 	<link rel="stylesheet" href="{% static "css/templatemo-blue.css" %}" type="text/css"/>
 </head>
 <body data-spy="scroll" data-target=".navbar-collapse">
+	<div class="container" style="margin-left: 0px; width:100%">
+			<div class="row" >
+				<div class="navbar navbar-inverse" role="navigation">
+					<div class="navbar-header">
+				        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+				        <span class="sr-only">Toggle navigation</span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        </button>
+				        <a rel="home" href="#"style="padding-top:20px;padding-left:20px; text-align: center;font-size: 40px;color: #FFFFFF; font-family: '._LANENAR_-webfont';">Trends</a>
+				    </div>
+				    <div class="collapse navbar-collapse navbar-ex1-collapse">
+				    	<div class="col-sm-6 col-md-6">
+					    	<form class="navbar-form" role="search" method="get" id="search-form" name="search-form" >
+						        <div class="input-group">
+						            <input type="text" class="form-control" placeholder="Search" id="query" name="query" value="" >
+							            <div class="input-group-btn">
+						            <button type="submit" class="btn btn-success" style="background-color:#FFFFFF;border-color:transparent;"><span class="icon"><i class="fa fa-search" style="color:#000;"></i></span></button>
+						            </div>
+						        </div>
+					        </form>
+				        </div>
+				        
+				    </div>
+				</div>				
+			</div>	
+		</div>
 
 <!-- preloader section -->
 <div class="preloader">
@@ -24,7 +52,8 @@
      </div>
 </div>
 
-<!-- header section -->
+
+<!-- header section 
 <header>
 	<div class="container">
 		<div class="row">
@@ -44,7 +73,7 @@
 	</div>
 </header>
 
-
+-->
 
 
 
@@ -52,8 +81,8 @@
 <section class="container">
 	<div class="row">
 		<div  class="col-md-6 col-sm-12" >
-			<div class="about" style="height: 350px;">
-				<h3 class="accent" style="padding-bottom:20px;">Info</h3>
+			<div class="about" style="height: 350px;margin-top: 50px;">
+				<h2 class="accent" style="padding-bottom:20px;margin-top:30px;font-family: 'ProximaNova-Regular';">Info</h2>
 			<p>
 				Want to know which are the most popular topics people are talking about??
 			</p>
@@ -64,7 +93,7 @@
 			</div>
 		</div>
 		<div class="col-md-6 col-sm-12" >
-			<div class="Interests" style="height: 350px;">
+			<div class="Interests" style="height: 350px;font-family: 'ProximaNova-Regular';margin-top: 50px;">
 				<h2 class="white">Interests</h2>
 				<div>
 				<input type="checkbox" id="finance" name="finance">
@@ -92,7 +121,7 @@
 <section class="container">
 	<div class="row">
 		<div class="col-md-8 col-sm-12">
-			<div class="hashtags" style="height: 450px;">
+			<div class="hashtags" style="height: 450px;font-family: 'ProximaNova-Regular'; font-size:20px;">
 				<h2 class="white">Hashtags</h2>
 						<ul>
 						{% for  hashtag in hashtags %} 
@@ -103,7 +132,7 @@
 		</div>
 		<div class="col-md-4 col-sm-12" >
 			<div class="topics" style="height: 450px;">
-				<h2>User Mentions</h2>
+				<h2 class="accent" style="font-family: 'ProximaNova-Regular';">User Mentions</h2>
 					<ul>
 						{% for  mention in mentions %} 
 						<li > <a href="{% url 'detail' 'm' mention.rank %}"> {{ mention.mentioned_user }} </a></li>
