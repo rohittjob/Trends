@@ -64,6 +64,7 @@ MONGO_INSTALL_FILE = 'mongo_install.lnk'
 
 # Directories
 
+JAVASCRIPT_DIR = 'javascript'
 EXTRACTOR_DIR = 'extractor'
 PROCESSOR_DIR = 'processor'
 DATA_HANDLER_DIR = 'Data Handler'
