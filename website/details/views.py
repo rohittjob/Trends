@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from home.models import TopHashTags, TopUserMentions
-from utilities.tweets import *
+from utilities.live_tweets import *
 import json
 
 def detail(request, type, rank):
