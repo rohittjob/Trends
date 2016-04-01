@@ -9,3 +9,10 @@
     Can save the original HTML just in case. Save it in a separate folder.
 
 '''
+from goose import Goose
+
+for url in URLs:
+g = Goose({'browser_user_agent': 'Mozilla'})
+article = g.extract(url=url)
+print article.title
+print article.cleaned_text[:500]
