@@ -11,7 +11,6 @@ from tweepy import Stream
 from tweepy.streaming import StreamListener
 
 
-
 FILESIZE_LIMIT = MAX_TWEETS_IN_FILE
 DISPLAY_INTERVAL = DISPLAY_COMPLETED_TWEETS_INTERVAL
 FILE_NUMBER_LIMIT = FILE_NUMBER_RESET_VALUE
@@ -25,8 +24,8 @@ total_cnt = 0
 
 ROOT = get_dir(__file__)
 
-FILE_PATH = join(ROOT, EXTRACTOR_DATA_DIR)
-TEMP_PATH = join(ROOT, PREPROCESSOR_TEMP_DIR)
+FILE_PATH = join(ROOT, DATA_DIR)
+TEMP_PATH = join(ROOT, TEMP_DIR)
 
 
 def get_filename(directory, number):

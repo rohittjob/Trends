@@ -11,3 +11,6 @@ langid==1.1.5
 configparser==3.3.0r2
 gensim==0.12.4
 nltk==3.0.3
+pytagcloud==0.3.5
+pygame==1.9.2a0
+simplejson==3.8.2

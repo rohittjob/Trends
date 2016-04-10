@@ -15,6 +15,8 @@ HASHTAGS = 'hashtags'
 MENTIONS = 'user_mentions'
 URLS = 'urls'
 URL = 'url'
+EXPANDED_URL = 'expanded_url'
+RETWEETED_STATUS = 'retweeted_status'
 
 
 TIMESTAMP = 'Timestamp'
@@ -31,6 +33,8 @@ WEEKLY_RESULTS_COLLECTION = 'weekly_result_'
 TEMP_RAW_COLLECTION = 'raw_temp'
 TEMP_RESULTS_COLLECTION = 'result_temp'
 VALUE = 'value'
+COUNT = 'count'
+PSEUDONYMS = 'pseudos'
 TAG = '_id'
 
 
@@ -44,7 +48,7 @@ AGGREGATION_REDUCE_FUNCTION = 'aggregationReduceFunction.js'
 MONGO_INIT_FILE = 'start_mongo.bat'
 ENGINE_MANAGER = 'manager.py'
 PREPROCESSOR = 'preprocess.py'
-DAILY_AGGREGATOR = 'daily_aggregation.py'
+ENTITY_AGGREGATOR = 'entity_aggregation.py'
 WEEKLY_AGGREGATOR = 'weekly_aggregation.py'
 EXTRACTOR = 'tweet_extractor.py'
 PROCESSOR = 'process.py'
@@ -62,14 +66,21 @@ PIP_INSTALL_FILE = 'get-pip.py'
 PYTHON_INSTALL_FILE = 'python_install.lnk'
 MONGO_INSTALL_FILE = 'mongo_install.lnk'
 
+# LDA Files
+
+DICTIONARY = 'dictionary.dict'
+CORPUS = 'corpus.mm'
+
+
 # Directories
 
 JAVASCRIPT_DIR = 'javascript'
 EXTRACTOR_DIR = 'extractor'
 PROCESSOR_DIR = 'processor'
 DATA_HANDLER_DIR = 'Data Handler'
-EXTRACTOR_DATA_DIR = 'data'
-PREPROCESSOR_TEMP_DIR = 'temp'
+DATA_DIR = 'data'
+TEMP_DIR = 'temp'
+TEMP = 'temp2'
 ENGINE_DIR = 'engine'
 MISCELLANEOUS_DIR = 'miscellaneous'
 DEPENDENCIES_DIR = 'dependencies'

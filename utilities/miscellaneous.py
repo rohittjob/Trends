@@ -4,16 +4,17 @@ import json
 from utilities.constants import *
 
 
-def check_percent(cur_count, total_count, interval, prev):      # interval it is the interval of display,
-                                                                # prev is previously displayed percentage
+def display_percentage(cur_count, total_count, interval):      # interval it is the interval of display,
     if total_count == 0:
-        return 0
-    per = (cur_count * 100) / total_count
-    rounded_per = (per/interval)*interval
-    prev = rounded_per
+        print '\r',
+        print str(100) + '% complete',
+        return
+
+    percent = (cur_count * 100) / total_count
+    rounded_percent = (percent/interval)*interval
+
     print '\r',
-    print str(prev) + '% complete',
-    return prev
+    print str(rounded_percent) + '% complete',
 
 
 def is_json(obj):

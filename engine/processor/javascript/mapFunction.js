@@ -2,7 +2,8 @@ function map(){
     var tags = this.entities;
 
     for(var i=0; i<tags.length; i++) {
-        emit(tags[i],1)
+        var lower = tags[i].toLowerCase()
+        emit(lower, {'pseudos': [tags[i]], 'count': 1});
     }
 
 }
