@@ -40,16 +40,16 @@ def execute():
 
     start()
 
-    map_function = Code(open(join(JAVASCRIPT_PATH, MAP_FUNCTION), 'r').read())
-    reduce_function = Code(open(join(JAVASCRIPT_PATH, REDUCE_FUNCTION), 'r').read())
-    aggregate_map_function = Code(open(join(JAVASCRIPT_PATH, AGGREGATION_MAP_ADD_FUNCTION), 'r').read())
-    aggregate_reduce_function = Code(open(join(JAVASCRIPT_PATH, AGGREGATION_REDUCE_FUNCTION), 'r').read())
+    map_function = Code(open(join(JAVASCRIPT_PATH, MAP_FUNCTION_FILENAME), 'r').read())
+    reduce_function = Code(open(join(JAVASCRIPT_PATH, REDUCE_FUNCTION_FILENAME), 'r').read())
+    aggregate_map_function = Code(open(join(JAVASCRIPT_PATH, AGGREGATION_MAP_ADD_FUNCTION_FILENAME), 'r').read())
+    aggregate_reduce_function = Code(open(join(JAVASCRIPT_PATH, AGGREGATION_REDUCE_FUNCTION_FILENAME), 'r').read())
 
     temp_raw.map_reduce(map_function, reduce_function, TEMP_RESULTS_COLLECTION)
     temp_results.map_reduce(aggregate_map_function, aggregate_reduce_function, {'reduce': RESULTS_COLLECTION_NAME})
 
-    if temp_raw.count() > 0:
-        coll.insert_many(temp_raw.find())
+    # if temp_raw.count() > 0:
+    #     coll.insert_many(temp_raw.find())
     temp_results.drop()
     # temp_raw.drop() # TODO
     client.close()
@@ -58,5 +58,4 @@ def execute():
 
 
 if __name__ == '__main__':
-    # execute()
-    pass
+    execute()

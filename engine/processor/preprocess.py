@@ -16,7 +16,7 @@ from pymongo import MongoClient
 from pymongo.errors import BulkWriteError
 
 from utilities.miscellaneous import display_percentage
-from utilities.mongo import check_or_create_collection
+from utilities.mongo import check_or_create_collection, insert_many
 from utilities.os_util import dirname, get_dir, get_files_in_dir
 from utilities.time_management import datetime, start, stop
 from utilities.entities.Collection import Collection
@@ -115,10 +115,8 @@ def execute():
         data_file_path = join(TEMP_PATH, data_file)
         tweets_data = extract_data(data_file_path)
         processed_tweets = process(tweets_data)
-        try:
-            collection.insert_many(processed_tweets, ordered=False)
-        except BulkWriteError:
-            pass
+
+        insert_many(collection, processed_tweets)
 
         # remove(data_file_path)  TODO
 

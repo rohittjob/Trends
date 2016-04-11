@@ -17,6 +17,7 @@ URLS = 'urls'
 URL = 'url'
 EXPANDED_URL = 'expanded_url'
 RETWEETED_STATUS = 'retweeted_status'
+LOWER_ENTITY = '_id'
 
 
 TIMESTAMP = 'Timestamp'
@@ -28,10 +29,15 @@ USERNAME = 'Username'
 
 TWEETS_DB = 'tweets'
 RAW_COLLECTION = 'raw_'
-RESULTS_COLLECTION = 'result_'
-WEEKLY_RESULTS_COLLECTION = 'weekly_result_'
+RESULTS_COLLECTION = 'entity_result_'
 TEMP_RAW_COLLECTION = 'raw_temp'
 TEMP_RESULTS_COLLECTION = 'result_temp'
+URL_RESULTS_COLLECTION = 'url_result_'
+
+
+def TOPIC_URL_AGGR_COLLECTION(topic_id):
+    return URL_RESULTS_COLLECTION + str(topic_id)
+
 VALUE = 'value'
 COUNT = 'count'
 PSEUDONYMS = 'pseudos'
@@ -39,11 +45,11 @@ TAG = '_id'
 
 
 # FileNames
-MAP_FUNCTION = 'mapFunction.js'
-REDUCE_FUNCTION = 'reduceFunction.js'
-AGGREGATION_MAP_ADD_FUNCTION = 'aggregationAddMapFunction.js'
-AGGREGATION_MAP_SUBTRACT_FUNCTION = 'aggregationSubtractMapFunction.js'
-AGGREGATION_REDUCE_FUNCTION = 'aggregationReduceFunction.js'
+MAP_FUNCTION_FILENAME = 'mapFunction.js'
+REDUCE_FUNCTION_FILENAME = 'reduceFunction.js'
+AGGREGATION_MAP_ADD_FUNCTION_FILENAME = 'aggregationAddMapFunction.js'
+AGGREGATION_MAP_SUBTRACT_FUNCTION_FILENAME = 'aggregationSubtractMapFunction.js'
+AGGREGATION_REDUCE_FUNCTION_FILENAME = 'aggregationReduceFunction.js'
 
 MONGO_INIT_FILE = 'start_mongo.bat'
 ENGINE_MANAGER = 'manager.py'
@@ -105,3 +111,6 @@ GREATER_THAN_OR_EQUAL = '$gte'
 
 JSON = '.json'
 TSV = '.tsv'
+
+
+
