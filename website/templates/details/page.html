@@ -1,79 +1,74 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <head>
-    <meta charset="utf-8">
-    <title>Details</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
+  <meta charset="utf-8">
+  <title>Details</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
 
-    <!-- stylesheet css -->
+  <!-- stylesheet css -->
 
 
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'css/templatemo-blue.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'css/recent-tweets.css' %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/templatemo-blue.css" %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static "css/recent-tweets.css" %}" type="text/css"/>
 </head>
 
 <style>
 
 
-    #tweets {
-        margin-left: 100px;
-        margin-top: 30px;
-        background: #FFF;
-        padding: 50;
-        overflow: hidden;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
-        width: 50%;
-        float: left;
-    }
+#tweets{
+  margin-left: 100px;
+  margin-top: 30px;
+  background: #FFF;
+  padding: 50;
+  overflow: none;
+  box-shadow: 3px 3px 3px rgba(0,0,0,.5);
+  width: 40%;
+  float: left;
+}
+#container{
+    height: 618px;
+    
+}
+#graph{
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 30px;
+  background: #FFF;
+  padding: 10;
+  overflow: none;
+  box-shadow: 3px 3px 3px rgba(0,0,0,.5);
+}
+#related_topics{
+  margin-right: 100px;
+  margin-top: 30px;
+  background: #FFF;
+  padding: 150;
+  overflow: none;
+  box-shadow: 3px 3px 3px rgba(0,0,0,.5);
+  float: right;
+  height: inherit;
+  width: 40%;
+}
 
-    #container {
-        height: 618px;
-
-    }
-
-    #graph {
-        margin-left: 100px;
-        margin-right: 100px;
-        margin-top: 30px;
-        background: #FFF;
-        padding: 10px;
-        overflow: hidden;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
-    }
-
-    #related_topics {
-        margin-right: 100px;
-        margin-top: 30px;
-        background: #FFF;
-        padding: 150;
-        overflow: hidden;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, .5);
-        float: right;
-        height: inherit;
-        width: 33%;
-    }
 
     text.shadow {
         stroke: #fff;
         stroke-width: 2.5px;
         opacity: 0.9;
     }
-
     path {
         stroke: steelblue;
         stroke-width: 2;
         fill: none;
     }
-
     line {
         stroke: grey;
         opacity: 0.5;
     }
-
     .axis path,
     .axis line {
         fill: none;
@@ -81,26 +76,21 @@
         stroke-width: 1;
         shape-rendering: crispEdges;
     }
-
     .grid .tick {
         stroke: lightgrey;
         opacity: 0.7;
     }
-
     .grid path {
         stroke-width: 0;
     }
-
     .area {
         fill: lightsteelblue;
         stroke-width: 0;
     }
-
     .overlay {
         fill: none;
         pointer-events: all;
     }
-
     .focus circle {
         fill: green;
         stroke: blue;
@@ -112,294 +102,297 @@
 
 
 <div id="graph">
-    <h4 class="accent" style="padding:20px; color: #424242;"><u>Trend for {{ topic_name }} over the past week</u></h4>
+  <h4 class="accent" style="padding:20px; color: #424242;"><u>Trend for {{ topic_name }} over the past week</u></h4>
 </div>
 
-<h4 class="accent" style="padding:20px; color: #424242;"><u>Live tweets for {{ topic_name }}</u></h4>
-<!-- MAIN BODY -->
+<div id="container">
+<!-- Displaying live tweets for the topic-->
+<div id="tweets">
+  <h4 class="accent" style="padding:20px; color: #424242;"><u>Live tweets for {{ topic_name }}</u></h4>
+   <!-- MAIN BODY -->
+  
+  
+            
 
+                        <table cellspacing="0" cellpadding="0" border="0" width="500" class="responsive-table">
+                            
+                            
+                            <tr>
+                                <td align="left">
+                                <!-- LIVE DYNAMIC TWEETS IN AN EMAIL AWW YISSS -->
+                                <!-- TWEET #TEDC15 TO SEE YOUR TWEET APPEAR IN THE STREAM! -->
+                                <!-- THIS ENTIRE SECTION SHOWS FOR WEBKIT ONLY, USES DYNAMIC CSS FILE THAT OVERWRITES THE CONTENT PROPERTY FOR EACH EMPTY TWEET DIV - REFER TO THE LINKED STYLESHEET IN THE HEAD TO SEE THE CSS FOR THIS SECTION -->
+                                    
+                                    <div class="wrapper">
 
-<table cellspacing="0" cellpadding="0" border="0" width="500" class="responsive-table">
+                                    {% for tweet in tweets  %}
+                                        <div class="tweet-container" id="tweet-{{ tweet.number }}">
+                                            <a id="url-{{ tweet.number }}" href="https://twitter.com/statuses/{{ tweet.id }}" target="_blank">  
+                                                <div class="tweet slide" id='slide-{{ tweet.number }}'>      
+                                                    <div class="tweet-avatar-wrapper">
+                                                        <div id="dp-url-{{ tweet.number }}" class="avatar" style="background-image: url('{{ tweet.dp_url }}');"></div>
+                                                    </div>
+                                                    <div class="tweet-wrapper">
+                                                        <span class="name" id="name-{{ tweet.number }}">{{ tweet.name }}</span> <span class="handle" id="handle-{{ tweet.number }}"> {{ tweet.handle }}</span>
+                                                        <span class="timestamp" id="timestamp-{{ tweet.number }}">{{ tweet.date }}</span>
+                                                        <span class="copy" id="text-{{ tweet.number }}"> {{ tweet.text }}</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
 
-
-    <tr>
-        <td align="left">
-            <!-- LIVE DYNAMIC TWEETS IN AN EMAIL AWW YISSS -->
-            <!-- TWEET #TEDC15 TO SEE YOUR TWEET APPEAR IN THE STREAM! -->
-            <!-- THIS ENTIRE SECTION SHOWS FOR WEBKIT ONLY, USES DYNAMIC CSS FILE THAT OVERWRITES THE CONTENT PROPERTY FOR EACH EMPTY TWEET DIV - REFER TO THE LINKED STYLESHEET IN THE HEAD TO SEE THE CSS FOR THIS SECTION -->
-
-            <div class="wrapper">
-
-                {% for tweet in tweets %}
-                <div class="tweet-container" id="tweet-{{ tweet.number }}">
-                    <a id="url-{{ tweet.number }}" href="https://twitter.com/statuses/{{ tweet.id }}" target="_blank">
-                        <div class="tweet slide" id='slide-{{ tweet.number }}'>
-                            <div class="tweet-avatar-wrapper">
-                                <div id="dp-url-{{ tweet.number }}" class="avatar"
-                                     style="background-image: url('{{ tweet.dp_url }}')"></div>
-                            </div>
-                            <div class="tweet-wrapper">
-                                <span class="name" id="name-{{ tweet.number }}">{{ tweet.name }}</span> <span
-                                    class="handle" id="handle-{{ tweet.number }}"> {{ tweet.handle }}</span>
-                                <span class="timestamp" id="timestamp-{{ tweet.number }}">{{ tweet.date }}</span>
-                                <span class="copy" id="text-{{ tweet.number }}"> {{ tweet.text }}</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                {% endfor %}
-            </div>
-        </td>
-    </tr>
-
-</table>
+                                    {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    
+            
+            
 
 
 </div>
 
 <!-- Related Topics list-->
 <div id="related_topics">
-    <h4 class="accent" style="padding:20px; color: #424242; text-align:center;"><u>Related topics</u></h4>
-    <div style="margin-left: 85px; margin-right: 85px;">
-        <div class="floating-box">Related topic 1</div>
-        <div class="floating-box">Related topic 2</div>
-        <div class="floating-box">Related topic 3</div>
-        <div class="floating-box">Related topic 4</div>
-        <div class="floating-box">Related topic 5</div>
-    </div>
+<h4 class="accent" style="padding:20px; color: #424242; text-align:center;"><u>Articles</u></h4>
+<div style="margin-left: 85px; margin-right: 85px;">
+  <div class="floating-box"><BIG>Summary 1</BIG><br><br>
+    There are many cases of diplomats, athletes, musicians and others defecting and claiming asylum while representing North Korea in other countries. Some border guards have simply walked away from their posts. </div>
+  <div class="floating-box"><BIG>Summary 2</BIG><br><br>
+  A major fire broke out at a garment factory where workers also live in the Bhiwandi town of Thane district, around 30 km from Mumbai, on Tuesday, officials said in Maharashtra. Local police officers said that by 10:30 am, around 20 people trapped inside had been safely rescued from the four-storey building. 
 </div>
 </div>
-</body>
+</div>
+</div>
 
-<script src="{% static 'js/area_graph_with_tooltip_js1.js' %}"></script>
-<script src="{% static 'js/area_graph_with_tooltip_js2.js' %}"></script>
+<script src="{% static "js/area_graph_with_tooltip_js1.js" %}"></script>
+<script src="{% static "js/area_graph_with_tooltip_js2.js" %}"></script>
 
-<script src="{% static 'js/jquery.js' %}"></script>
-<script src="{% static 'js/jquery.backstretch.min.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/jquery.backstretch.min.js" %}"></script>
+<script src="{% static "js/custom.js" %}"></script>
 
 <script>
-    // script for top tweets
+// script for top tweets
+       
 
 
     var cur = 6;
     var cur_str = cur.toString();
-    var since_id = since_id;
+    var since_id = {{ since_id }};
+    
+    setInterval(function(){
+    
+    
+      $.get('/details/tweet/', {keyword: "{{ topic_name }}", since_id: since_id},
+      function(json){
+        $('#name-'+cur_str).text(json.name);
+        $('#handle-'+cur_str).text(json.handle);
+        $('#text-'+cur_str).text(json.text);
+        $('#timestamp-'+cur_str).text(json.date);
+        $('#url-'+cur_str).attr("href", "https://twitter.com/statuses/"+json.tweet_id);
+        $('#dp-url-'+cur_str).css("background-image", "url('" + json.dp_url + "')");
+        $('#tweet-'+cur_str).prependTo('.wrapper');
 
-    setInterval(function () {
+        cur = cur -1;
+        if(cur ==0) {
+            cur = 6;
+        }
 
-
-        $.get('/details/tweet/', {keyword: "{{ topic_name }}", since_id: since_id},
-                function (json) {
-                    $('#name-' + cur_str).text(json.name);
-                    $('#handle-' + cur_str).text(json.handle);
-                    $('#text-' + cur_str).text(json.text);
-                    $('#timestamp-' + cur_str).text(json.date);
-                    $('#url-' + cur_str).attr("href", "https://twitter.com/statuses/" + json.tweet_id);
-                    $('#dp-url-' + cur_str).css("background-image", "url('" + json.dp_url + "')");
-                    $('#tweet-' + cur_str).prependTo('.wrapper');
-
-                    cur = cur - 1;
-                    if (cur == 0) {
-                        cur = 6;
-                    }
-
-                    cur_str = cur.toString();
-                    since_id = json.tweet_id;
-                });
+        cur_str = cur.toString();    
+        since_id = json.tweet_id;
+     });
 
     }, 6000);
-
+        
 </script>
 
 <script>
-    var margin = {
-                top: 35,
-                right: 100,
-                bottom: 60,
-                left: 150
-            },
-            width = 1150 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+        var margin = {
+            top: 35,
+            right: 100,
+            bottom: 60,
+            left: 150
+        },
+        width = 1150 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
-    //Beautify the date
-    var parseDatetime = d3.time.format("%d-%m-%Y %H:%M").parse;
-    var tooltipDate = d3.time.format("%d-%m-%Y %H:%M");
+         //Beautify the date
+        var parseDatetime = d3.time.format("%d-%m-%Y %H:%M").parse;
+        var tooltipDate = d3.time.format("%d-%m-%Y %H:%M");
 
-    //Get the Amount of alerts for tooltip
-    var bisectDate = d3.bisector(function (d) {
-        return d.datetime;
-    }).left;
+         //Get the Amount of alerts for tooltip
+        var bisectDate = d3.bisector(function(d) {
+            return d.datetime;
+        }).left;
 
-    var x = d3.time.scale().range([0, width]);
-    var y = d3.scale.linear().range([height, 0]);
+        var x = d3.time.scale().range([0, width]);
+        var y = d3.scale.linear().range([height, 0]);
 
-    var xAxis = d3.svg.axis()
+        var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
             .ticks(5);
 
-    var yAxis = d3.svg.axis()
+        var yAxis = d3.svg.axis()
             .scale(y)
             .orient("left")
             .ticks(5);
 
-    var area = d3.svg.area()
-            .x(function (d) {
+        var area = d3.svg.area()
+            .x(function(d) {
                 return x(d.datetime);
             })
             .y0(height)
-            .y1(function (d) {
+            .y1(function(d) {
                 return y(d.count);
             });
 
-    var valueline = d3.svg.line()
-            .x(function (d) {
+        var valueline = d3.svg.line()
+            .x(function(d) {
                 return x(d.datetime);
             })
-            .y(function (d) {
+            .y(function(d) {
                 return y(d.count);
             });
 
-    var svg = d3.select("#graph")
+        var svg = d3.select("#graph")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    function make_x_axis() { // function for the x grid lines
-        return d3.svg.axis()
+        function make_x_axis() { // function for the x grid lines
+            return d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
                 .ticks(5)
-    }
+        }
 
-    function make_y_axis() { // function for the y grid lines
-        return d3.svg.axis()
+        function make_y_axis() { // function for the y grid lines
+            return d3.svg.axis()
                 .scale(y)
                 .orient("left")
                 .ticks(5)
-    }
+        }
 
-    // Get the data
-    d3.tsv("{% static tsv_name %}", function (error, data) {
-        data.forEach(function (d) {
-            d.datetime = parseDatetime(d.datetime);
-            d.count = +d.count;
-        });
+         // Get the data
+        d3.tsv("{% static tsv_name %}", function(error, data) {
+            data.forEach(function(d) {
+                d.datetime = parseDatetime(d.datetime);
+                d.count = +d.count;
+            });
+            
+            // Sort the data or bisect() won't work right
+            data.sort(function(a, b) {return a.datetime - b.datetime;});
 
-        // Sort the data or bisect() won't work right
-        data.sort(function (a, b) {
-            return a.datetime - b.datetime;
-        });
+            // Scale the range of the data
+            x.domain(d3.extent(data, function(d) {
+                return d.datetime;
+            }));
+            y.domain([0, d3.max(data, function(d) {
+                return d.count;
+            })]);
 
-        // Scale the range of the data
-        x.domain(d3.extent(data, function (d) {
-            return d.datetime;
-        }));
-        y.domain([0, d3.max(data, function (d) {
-            return d.count;
-        })]);
-
-        // Add the filled area
-        svg.append("path")
+            // Add the filled area
+            svg.append("path")
                 .datum(data)
                 .attr("class", "area")
                 .attr("d", area);
 
-        svg.append("g") // Draw the y Grid lines
-                .attr("class", "grid")
+            svg.append("g") // Draw the y Grid lines
+            .attr("class", "grid")
                 .call(make_y_axis()
-                        .tickSize(-width, 0, 0)
-                        .tickFormat("")
-                );
+                    .tickSize(-width, 0, 0)
+                    .tickFormat("")
+            )
 
-        // Add the valueline path.
-        svg.append("path")
+            // Add the valueline path.
+            svg.append("path")
                 .attr("class", "line")
                 .attr("d", valueline(data));
 
-        // Add the X Axis
-        svg.append("g")
+            // Add the X Axis
+            svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
-        // Add the Y Axis
-        svg.append("g")
+            // Add the Y Axis
+            svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis);
 
-        // Tooltip
-        var focus = svg.append("g")
+            // Tooltip
+            var focus = svg.append("g")
                 .attr("class", "focus")
                 .style("display", "none");
 
-        focus.append("circle")
+            focus.append("circle")
                 .attr("r", 5.0);
 
-        focus.append("text")
+            focus.append("text")
                 .attr("x", -150)
                 .attr("dy", -20);
 
-        svg.append("text")      // text label for the x axis
-                .attr("x", width / 2)
-                .attr("y", height + 50)
+            svg.append("text")      // text label for the x axis
+                .attr("x", width/2)
+                .attr("y",  height+50 )
                 .style("text-anchor", "middle")
                 .text("Date");
 
-        svg.append("text")  //label for the y axis
+            svg.append("text")  //label for the y axis
                 .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left + 40)
-                .attr("x", 0 - (height / 2))
+                .attr("y", 0 - margin.left+40)
+                .attr("x",0 - (height / 2))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .text("Number of tweets");
 
 
-        svg.append("rect")
+            svg.append("rect")
                 .attr("class", "overlay")
                 .attr("width", width)
                 .attr("height", height)
-                .on("mouseover", function () {
+                .on("mouseover", function() {
                     focus.style("display", null);
 
                 })
-                .on("mouseout", function () {
+                .on("mouseout", function() {
                     focus.style("display", "none");
                 })
                 .on("mousemove", mousemove);
 
-        function mousemove() {
-            var x0 = x.invert(d3.mouse(this)[0]),
+            function mousemove() {
+                var x0 = x.invert(d3.mouse(this)[0]),
                     i = bisectDate(data, x0, 1),
                     d0 = data[i - 1],
                     d1 = data[i],
                     d = x0 - d0.datetime > d1.datetime - x0 ? d1 : d0;
-            focus.attr("transform", "translate(" + x(d.datetime) + "," + y(d.count) + ")");
-            focus.select("text").text(Math.floor(d.count) + ' tweets on \n' + tooltipDate(d.datetime));
-            focus.style("fill", '#009900');
+                focus.attr("transform", "translate(" + x(d.datetime) + "," + y(d.count) + ")");
+                focus.select("text").text(Math.floor(d.count) + ' tweets on \n' + tooltipDate(d.datetime));
+                focus.style("fill", '#009900');
 
-        }
+            }
+            // End Tooltip
+        });
+    </script>
 
-        // End Tooltip
-    });
-</script>
-
-<!-- footer section -->
+    <!-- footer section -->
 <footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-sm-12" style="color:#3366CC;">
-                <p>Created by students of MNNIT Allahabad</p>
-                <ul class="social-icons">
-                    <li><a href="#" class="fa fa-facebook"></a></li>
-                    <li><a href="#" class="fa fa-twitter"></a></li>
-                    <li><a href="#" class="fa fa-github"></a></li>
-                </ul>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-sm-12" style="color:#3366CC;">
+        <p>Created by students of MNNIT Allahabad</p>
+        <ul class="social-icons">
+          <li><a href="#" class="fa fa-facebook"></a></li>
+          <li><a href="#" class="fa fa-twitter"></a></li>
+          <li><a href="#" class="fa fa-github"></a></li>
+        </ul>
+      </div>
     </div>
+  </div>
 </footer>

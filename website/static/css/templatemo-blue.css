@@ -166,8 +166,8 @@ h2 {
 }
 
 .floating-box {
-  width: 250px;
-  height: 50px;
+  width: 365px;
+  height: auto;
   margin: 0 auto;
   margin-top: 15px;
   background: #FFF;
