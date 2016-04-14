@@ -24,7 +24,7 @@ def is_json(obj):
         for key in necessary_keys:
             if key not in keys:
                 return False
-    except:
+    except:  # TODO
         return False
     return True
 

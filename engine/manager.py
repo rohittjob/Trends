@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
         portal_subprocess = start_portal()
 
-        alarm(MANAGER, STOP_TIME)
+        alarm(MANAGER_PROCESS, STOP_TIME)
 
         kill_process_tree(extractor.pid)
         cleanup()
@@ -115,7 +115,7 @@ if __name__ == '__main__':
             weekly_subprocess.wait()
             break
 
-        alarm(MANAGER, RESTART_TIME)
+        alarm(MANAGER_PROCESS, RESTART_TIME)
         print 'Restarting scripts!!! '
         TODAY = TOMORROW
         TOMORROW = get_next_day(TODAY)
