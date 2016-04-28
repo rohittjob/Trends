@@ -1,36 +1,31 @@
 """
-
- Refer reference_files/preprocess.py
-
  Extract tweets from temp folder and clean it.
+ Save the timestamp, username, entities, retweet_details, urls, coordinates, place, id.
  Dump into a temp_raw collection.
- Clean the text for LDA. Also save the original tweet for sentiment analysis.
- Also save the timestamp, username, entities, retweet_details, urls, coordinates, place, id.
- Also might need to parse the text to check if it is a retweet -- starts with RT.
-
 """
 import json
-import pytz
+from os import remove
 from os.path import join
-from pymongo import MongoClient
-from pymongo.errors import BulkWriteError
+import pytz
 
+from pymongo import MongoClient
+
+from utilities.constants import *
+from utilities.entities.Collection import Collection
 from utilities.miscellaneous import display_percentage
 from utilities.mongo import check_or_create_collection, insert_many
+from utilities.time_management import datetime, start_timing, stop_timing
 from utilities.os_util import dirname, get_dir, get_files_in_dir
-from utilities.time_management import datetime, start, stop
-from utilities.entities.Collection import Collection
-from utilities.constants import *
 
 
 ENGINE_ROOT = dirname(get_dir(__file__))
 TEMP_PATH = join(ENGINE_ROOT, EXTRACTOR_DIR, TEMP_DIR)
 
-check_or_create_collection(TWEETS_DB, TEMP_RAW_COLLECTION, Collection.TEMP)
+check_or_create_collection(RAW_TWEETS_DB_NAME, TEMP_RAW_COLLECTION_NAME, Collection.TEMP)
 
 client = MongoClient()
-db = client.tweets
-collection = db[TEMP_RAW_COLLECTION]
+db = client[RAW_TWEETS_DB_NAME]
+collection = db[TEMP_RAW_COLLECTION_NAME]
 
 
 def is_retweet(tweet):
@@ -84,7 +79,7 @@ def process(tweets):  # extract relevant information from tweets
                 tweet = tweet[RETWEETED_STATUS]  # TODO see if this is needed
             processed_tweet = {ENTITIES: get_hash_and_mentions(tweet[ENTITIES])}
             if len(processed_tweet[ENTITIES]) == 0:  # checking if tweet has hashtags or user mentions
-                continue
+                continue  # TODO is this necessary?
 
             processed_tweet[TIMESTAMP] = extract_time(tweet[CREATED_AT])
             processed_tweet[USERNAME] = tweet[USER][SCREEN_NAME]
@@ -96,7 +91,7 @@ def process(tweets):  # extract relevant information from tweets
             processed_tweet[ID] = tweet[ID]
             processed_data.append(processed_tweet)
 
-        except:
+        except:  # TODO
             'Tweet Error'
             print tweet
 
@@ -107,26 +102,29 @@ def execute():
     data_files = get_files_in_dir(TEMP_PATH, JSON)
     l = len(data_files)
     print 'Started Preprocessing ' + str(l) + ' files... '
+    start_timing()
+
     cnt = 0
-    percent_interval = 1  # increment for the display percent
+    percent_interval = 1  # increment for the completion percent display
     display_percentage(cnt, l, percent_interval)
-    start()
+
     for data_file in data_files:
         data_file_path = join(TEMP_PATH, data_file)
         tweets_data = extract_data(data_file_path)
         processed_tweets = process(tweets_data)
 
         insert_many(collection, processed_tweets)
+        remove(data_file_path)
 
-        # remove(data_file_path)  TODO
-
+        # updating completion status
         cnt += 1
         display_percentage(cnt, l, percent_interval)
 
     client.close()
     print
     print 'Finished'
-    stop()
+
+    stop_timing()
 
 
 if __name__ == '__main__':

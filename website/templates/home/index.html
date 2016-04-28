@@ -8,9 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="">
     <meta name="description" content="">
-    
-    <!-- stylesheet css -->
 
+    <!-- stylesheet css -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'css/templatemo-blue.css' %}" type="text/css"/>
@@ -43,20 +42,16 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
 <!-- preloader section -->
 <div class="preloader">
     <div class="sk-spinner sk-spinner-wordpress">
         <span class="sk-inner-circle"></span>
     </div>
 </div>
-
-
 <!-- header section 
 <header>
     <div class="container">
@@ -76,10 +71,7 @@
         </div>
     </div>
 </header>
-
 -->
-
-
 <!-- about and skills section -->
 <section class="container">
     <div class="row">
@@ -94,7 +86,6 @@
                 <p>
                     Have a look at the top trending topics alongwith their trends map, extracted by analysing recent
                     tweets.
-
                 </p>
             </div>
         </div>
@@ -122,40 +113,12 @@
     </div>
     </div>
 </section>
-
 <!-- hashtags and topics -->
 <section class="container">
+        <h2>Word cloud</h2>
+        <img src="{% static "out/cloud.png" %}" style="width:550px;height=367px;">
+    </section>
 
-    <div style="margin-left: 100px; margin-top:20px; padding-bottom: 15px; font-family: 'ProximaNova-Bold'; font-size: 36px; width: 250px; text-align:center;"></div>
-    <div class="row">
-        <div class="col-md-8 col-sm-12">
-            <div class="hashtags" style="height: 450px;font-family: 'ProximaNova-Regular'; font-size:20px;">
-                <h2 class="white">Hashtags</h2>
-                <ul>
-                    {% for hashtag in hashtags %}
-                    <li><a href="{% url 'detail' 'h' hashtag.rank %}"> {{ hashtag.hashtag }} </a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-12">
-            <div class="topics" style="height: 450px;">
-                <h2 class="accent" style="font-family: 'ProximaNova-Regular';color: #3366CC;">User Mentions</h2>
-                <ul>
-                    {% for mention in mentions %}
-                    <li><a href="{% url 'detail' 'm' mention.rank %}"> {{ mention.mentioned_user }} </a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- sample word cloud -->
-<section class="container">
-<h2>Word cloud</h2>
-<img src="{% static "out/cloud.png" %}" style="width:600px;height:400px;">
-</section>
 <!-- contact and experience
 <section class="container">
     <div class="row">
@@ -182,7 +145,6 @@
     </div>
 </section>
 -->
-
 <!-- footer section -->
 <footer>
     <div class="container">
@@ -198,12 +160,10 @@
         </div>
     </div>
 </footer>
-
 <!-- javascript js -->
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/jquery.backstretch.min.js' %}"></script>
 <script src="{% static 'js/custom.js' %}"></script>
-
 </body>
 </html>

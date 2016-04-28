@@ -85,6 +85,13 @@ def convert_datetime_to_local(obj):
     tz = pytz.timezone(TIMEZONE)
     return obj.astimezone(tz)
 
+
+def get_differenced_day(current_day, days_delta):
+    diff = timedelta(days=days_delta)
+    differenced_day = current_day + diff
+    return differenced_day
+
+
 # %%%%%%%%%%%%%%%%%%%%%%%%% EXECUTION TIME FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

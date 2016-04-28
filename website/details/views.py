@@ -4,23 +4,14 @@ from home.models import TopHashTags, TopUserMentions
 from utilities.live_tweets import *
 import json
 
-def detail(request, type, rank):
+def detail(request, rank):
     context = {}
-    if type == 'h':
-        hashtag = TopHashTags.objects.get(rank=rank).hashtag
-        context['tsv_name'] = 'H_' + hashtag[1:].lower()
-        context['topic_name'] = hashtag
 
-    else:
-        mention = TopUserMentions.objects.get(rank=rank).mentioned_user
-        context['tsv_name'] = 'M_' + mention[1:].lower()
-        context['topic_name'] = mention
-    
-    context['tweets'] = get_tweets(context['topic_name'], 6)
-    if len(context['tweets']) > 0:
-        context['since_id'] = context['tweets'][0].id
-    else:
-        context['since_id'] = ''
+    hashtag = TopHashTags.objects.get(rank=rank).hashtag
+    context['tsv_name'] = 'topic' + str(rank)
+    context['topic_name'] = 'Topic ' + str(rank)
+
+    context['since_id'] = ''
     context['tsv_name'] = 'tsv/' + context['tsv_name'] + '.tsv'
     return render(request, 'details/page.html', context)
 

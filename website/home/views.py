@@ -26,7 +26,7 @@ def index(request):
         for j in range(0,(int)(freq_arr[i]*100)):
             text = text + words_arr[i] + " "
 
-    tags = make_tags(get_tag_counts(text)[:20], maxsize=100, colors=COLOR_SCHEMES['audacity'])  
+    tags = make_tags(get_tag_counts(text)[:20], maxsize=80, colors=COLOR_SCHEMES['audacity'])  
 
     output = os.path.join(os.getcwd(), './static/out')
         

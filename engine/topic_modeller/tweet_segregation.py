@@ -1,4 +1,4 @@
-'''
+"""
 
     Iterate over all tweets in each of the 100 collections.
     Each tweet has to be categorized into a topic.
@@ -11,7 +11,7 @@
     Also while iterating, find the best tweet that matches a topic, for each topic.
     This can be used to summarize the topic in the homepage.
 
-'''
+"""
 from gensim import models, corpora
 from os.path import join
 from pymongo import MongoClient, DESCENDING
@@ -33,8 +33,8 @@ corpus = corpora.MmCorpus(CORPUS_PATH)
 dictionary = corpora.Dictionary.load(DICTIONARY_PATH)
 lda = models.LdaModel.load('data/lda2_2.lda')
 
-COLLECTION_NAME = RAW_COLLECTION + '11-04-2016'
-RESULTS_COLLECTION_NAME = RESULTS_COLLECTION + '11-04-2016'
+COLLECTION_NAME = RAW_COLLECTION_PREFIX + '11-04-2016'
+RESULTS_COLLECTION_NAME = ENTITY_RESULTS_COLLECTION_PREFIX + '11-04-2016'
 
 client = MongoClient()
 db = client.tweets
@@ -107,22 +107,22 @@ def execute():
         entity_topic[actual_entity[lower_entity]] = topic_id
 
     print 'Topics are: '
-    for i in range(NUMBER_OF_TOPICS):
+    for i in range(NUMBER_OF_TOPICS - 1):
         print 'Topic', i, lda.print_topic(i, 20)
-        print top_tweet[i]
+        print top_tweet[i][TWEET]
 
     print
     print 'Entities: Topic'
     for entity in entity_topic.keys():
         print entity, '-', entity_topic[entity]
 
-    for lower_entity in entity_pseudos.keys():
-        for entity in entity_pseudos[lower_entity]:
-            topic_id = entity_topic[actual_entity[lower_entity]]
-            coll_name = 'topic' + str(topic_id)
-            check_or_create_collection(TWEETS_DB, coll_name, Collection.TEMP)
-            coll = db[coll_name]
-            copy_into_collection(raw_collection.find({ENTITIES: entity}), coll)
+    # for lower_entity in entity_pseudos.keys():
+    #     for entity in entity_pseudos[lower_entity]:
+    #         topic_id = entity_topic[actual_entity[lower_entity]]
+    #         coll_name = 'topic' + str(topic_id)
+    #         check_or_create_collection(TWEETS_DB, coll_name, Collection.TEMP)
+    #         coll = db[coll_name]
+    #         copy_into_collection(raw_collection.find({ENTITIES: entity}), coll)
 
     stop()
 
