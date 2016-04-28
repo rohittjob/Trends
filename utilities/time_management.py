@@ -34,7 +34,7 @@ def get_now():
 
 
 def get_today():
-    return get_differenced_day(datetime.today(), -19)  # TODO
+    return datetime.today()
 
 
 def get_safe_today():

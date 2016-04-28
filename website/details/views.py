@@ -4,24 +4,36 @@ from home.models import TopHashTags, TopUserMentions
 from utilities.live_tweets import *
 import json
 
-def detail(request, rank):
+
+def detail(request, topic_id):
     context = {}
+    context['tsv_name'] = 'topic' + str(topic_id)
+    context['topic_name'] = 'Topic ' + str(topic_id)
+    context['topic_id'] = topic_id
 
-    hashtag = TopHashTags.objects.get(rank=rank).hashtag
-    context['tsv_name'] = 'topic' + str(rank)
-    context['topic_name'] = 'Topic ' + str(rank)
+    topic = Topic.objects.get(topic_id=topic_id)
+    if topic.article_head != '':
+        context['article'] = True
+        context['article_head'] = topic.article_head
+        context['article_body'] = topic.article_body
 
-    context['since_id'] = ''
+    context['tweets'] = get_tweets(topic_id, 6)
+    print context['tweets']
+    if len(context['tweets']) > 0:
+        context['since_id'] = context['tweets'][0].id
+    else:
+        context['since_id'] = ''
     context['tsv_name'] = 'tsv/' + context['tsv_name'] + '.tsv'
     return render(request, 'details/page.html', context)
 
+
 def tweet(request):
-    keyword = request.GET['keyword']
+    topic_id = request.GET['topic_id']
     try:
         since_id = int(request.GET['since_id'])
     except:
         since_id = None
-    tweet = get_tweets(keyword, 1, since_id)
+    tweet = get_tweets(topic_id, 1, since_id)
     reply = {}
 
     if len(tweet) > 0:

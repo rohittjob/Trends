@@ -66,6 +66,7 @@ def execute():
     start_timing()
 
     topics = get_hot_topics()
+    print topics
     aggregate_urls(topics)
 
     for topic_id in topics:

@@ -1,7 +1,12 @@
 import tweepy
+import os
 from utilities.time_management import *
 from utilities.config import *
+import django
+os.environ["DJANGO_SETTINGS_MODULE"] = "portal.settings"
+django.setup()
 
+from details.models import Entities, Topic
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -19,10 +24,12 @@ class Tweet:
         self.dp_url = dp_url
 
 
-def get_tweets(keyword, count, since_id=None):
+def get_tweets(topic_id, count, since_id=None):
     tweets = []
     try: 
         api = tweepy.API(auth)
+        topic = Topic.objects.get(topic_id=topic_id)
+        keyword = Entities.objects.filter(topic=topic)[0]
         new_tweets = api.search(q=keyword, count=count, since_id=since_id, lang='en')
         
         cnt = 1

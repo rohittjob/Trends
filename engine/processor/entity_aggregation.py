@@ -8,6 +8,7 @@ from os.path import join
 from pymongo import MongoClient
 
 from utilities.constants import *
+
 from utilities.entities.Collection import Collection
 from utilities.mongo import check_or_create_collection, copy_into_collection
 from utilities.os_util import get_dir
@@ -49,7 +50,7 @@ def execute():
     temp_results.map_reduce(aggregate_map_function, aggregate_reduce_function, {'reduce': RESULTS_COLLECTION_NAME})
 
     if temp_raw.count() > 0:
-        copy_into_collection(temp_raw.find(), coll)
+        copy_into_collection(temp_raw.find(no_cursor_timeout=True), coll)
 
     temp_results.drop()
     temp_raw.drop()

@@ -164,19 +164,27 @@
 
     </div>
 
+
     <!-- Related Topics list-->
     <div id="related_topics">
         <h4 class="accent" style="padding:20px; color: #424242; text-align:center;"><u>Articles</u></h4>
-        <div style="margin-left: 25px; margin-right: 25px;">
-            <div class="floating-box"><BIG>Amrut Prajapati, witness against Asaram, succumbs to bullet wounds</BIG><br><br>
-                AHMEDABAD: Amrut Prajapati, a former aide of Asaram, succumbed to his bullet injuries on Tuesday at a private bungalow in Madhavpark society of Odhav. His family members said that the truth would emerge only if investigation was handed to a neutral agency.
-                <br>
-                Prajapati was shot at by two motorcycle-borne assailants while he was attending patients at his Rajkot clinic. Prajapati was an Ayurvedic doctor and before he turned against Asaram, he was working as a vaidya with him.
+        {% if article %}
+            <div style="margin-left: 25px; margin-right: 25px;">
+                <div class="floating-box"><BIG>{{ article_head }}</BIG><br><br>
+                    {{ article_body }}
+                </div>
 
             </div>
+        {% else %}
+            <div style="margin-left: 25px; margin-right: 25px;">
+                <div class="floating-box"><BIG> No Article </BIG><br><br>
 
-        </div>
+                </div>
+
+            </div>
+        {% endif %}
     </div>
+
 </div>
 
 <script src="{% static "js/area_graph_with_tooltip_js1.js" %}"></script>
@@ -197,7 +205,7 @@
     setInterval(function () {
 
 
-        $.get('/details/tweet/', {keyword: "{{ topic_name }}", since_id: since_id},
+        $.get('/details/tweet/', {topic_id: "{{ topic_id }}", since_id: since_id},
                 function (json) {
                     $('#name-' + cur_str).text(json.name);
                     $('#handle-' + cur_str).text(json.handle);

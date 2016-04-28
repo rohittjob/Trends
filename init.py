@@ -66,8 +66,8 @@ def check_mongo_db():
 
 
 if __name__ == '__main__':
-    check_python()
-    check_dependencies()
+    # check_python()
+    # check_dependencies()
     mongo = check_mongo_db()
     print 'Starting Engine... ',
     engine = subprocess.Popen(['python', ENGINE_PATH])

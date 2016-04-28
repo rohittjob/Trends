@@ -111,18 +111,25 @@
             </div>
         </div>
     </div>
-    </div>
 </section>
 <!-- word cloud -->
 <section class="container">
 
     <div class="row">
+        {% for topic in topics %}
+            <div class="col-md-6 col-sm-12">
+                <div class="about" style="margin-top: 50px;">
+                    <a href="{% url 'detail' topic %}">
+                        <img src="{% static '' %}wordclouds/cloud{{ topic }}.png"
+                             style="margin-left:0px;width:500px;height:333px;">
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
 
-        <div class="col-md-6 col-sm-12">
-            <div class="about" style="margin-top: 50px;">
-        <h2 class-"accent" style="padding-bottom:20px;margin-top:30px;font-family: 'ProximaNova-Regular';color: #3366CC;">Word cloud</h2>
-        <img src="{% static "out/cloud.png" %}" style="margin-left:0px;width:500px;height=333px;">
-    </section>
+    </div>
+
+</section>
 
 <!-- contact and experience
 <section class="container">

@@ -70,6 +70,7 @@ GRAPH_APPROXIMATOR = 'graph_approximation.py'
 LDA_PROCESS = 'lda.py'
 LDA_PREPROCESSOR = 'lda_preprocessing.py'
 TWEET_SEGREGATOR = 'tweet_segregation.py'
+MODELLER = 'modeller.py'
 
 DJANGO_MANAGER = 'manage.py'
 RUNSERVER_COMMAND = 'runserver'
@@ -103,11 +104,13 @@ MONGO_DIR = 'MongoDB'
 INFO_GENERATOR_DIR = 'info_generator'
 HTML_DIR = 'html'
 MODEL_DATA_DIR = 'model_data'
+TOPIC_MODELLER_DIR = 'topic_modeller'
 
 WEBSITE_DIR = 'website'
 STATIC_DIR = 'static'
 TSV_DIR = 'tsv'
 URLS_DIR = 'urls'
+WORDCLOUD_DIR = 'wordclouds'
 
 WHEELHOUSE = 'wheelhouse'
 

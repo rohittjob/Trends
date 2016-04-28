@@ -19,7 +19,7 @@ PROJECT_ROOT = dirname(ROOT)
 EXTRACTOR_SCRIPT_PATH = join(ROOT, EXTRACTOR_DIR, EXTRACTOR)
 EXTRACTOR_DATA_PATH = join(ROOT, EXTRACTOR_DIR, DATA_DIR)
 PROCESS_SCRIPT_PATH = join(ROOT, PROCESSOR_DIR, PROCESSOR)
-WEEKLY_PROCESS_SCRIPT_PATH = join(ROOT, PROCESSOR_DIR, WEEKLY_PROCESSOR)
+MODELLER_PROCESS_SCRIPT_PATH = join(ROOT, TOPIC_MODELLER_DIR, MODELLER)
 PORTAL_PROCESS_SCRIPT_PATH = join(PROJECT_ROOT, WEBSITE_DIR, DJANGO_MANAGER)
 
 
@@ -61,11 +61,11 @@ def data_processing(stop_bool, stop_time):
         processor.wait()
 
 
-def data_weekly_process():
-    print 'Starting Weekly Processor... ',
-    weekly_processor = subprocess.Popen(['python', WEEKLY_PROCESS_SCRIPT_PATH])
-    print 'Started with PID ' + str(weekly_processor.pid)
-    return weekly_processor
+def lda_process():
+    print 'Starting Topic Modeller... ',
+    topic_modeller = subprocess.Popen(['python', MODELLER_PROCESS_SCRIPT_PATH])
+    print 'Started with PID ' + str(topic_modeller.pid)
+    return topic_modeller
 
 
 def start_portal():
@@ -77,7 +77,7 @@ def start_portal():
 
 if __name__ == '__main__':
 
-    weekly_subprocess = None
+    lda_subprocess = None
     portal_subprocess = None
 
     while True:  # run everyday
@@ -92,8 +92,8 @@ if __name__ == '__main__':
 
         processor.start()
 
-        if weekly_subprocess:
-            weekly_subprocess.wait()
+        if lda_subprocess:
+            lda_subprocess.wait()
 
         portal_subprocess = start_portal()
 
@@ -109,10 +109,10 @@ if __name__ == '__main__':
         print 'Stopping portal... ',
         kill_process_tree(portal_subprocess.pid)
         print 'Stopped'
-        weekly_subprocess = data_weekly_process()
+        lda_subprocess = lda_process()
 
         if DEBUG:
-            weekly_subprocess.wait()
+            lda_subprocess.wait()
             break
 
         alarm(MANAGER_PROCESS, RESTART_TIME)

@@ -106,6 +106,7 @@ def save_to_collection():
 
 
 def save_model_data():
+
     for topic_id in range(NUMBER_OF_TOPICS):
         writers.append(init_writer(topic_id))
 
@@ -136,7 +137,7 @@ def execute():
     print 'Started at ' + get_time() + '... ',
     start_timing()
 
-    topic_db.drop()
+    client.drop_database(TOPIC_TWEETS_DB_NAME)
     results = entity_results_coll.find(limit=NUMBER_OF_TOP_ENTITIES, no_cursor_timeout=True) \
         .sort([(VALUE + '.' + COUNT, DESCENDING)])
 
