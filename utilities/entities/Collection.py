@@ -1,2 +1,2 @@
 class Collection:
-    RAW, TEMP, RESULT = range(3)
+    RAW, TEMP, ENTITY_RESULT, URL_RESULT, TOPIC = range(5)

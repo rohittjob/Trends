@@ -47,11 +47,17 @@ CHECK_SAFE_DATE_TIME = '01:00'  # This is to check if TODAY is actually the day 
 
 
 # Graph Approximation
-DAY_START = '15:30'
+DAY_START = '16:25'
 APPROXIMATION_RANGE = timedelta(minutes=1)
 
 
 # LDA Params
 NUMBER_OF_TOP_ENTITIES = 50
-TWEET_POOLING_SIZE = 1000  # tweets
-NUMBER_OF_TOPICS = 10
+TWEET_POOLING_SIZE = 100  # tweets
+NUMBER_OF_TOPICS = 18
+NUMBER_OF_PASSES = 20
+ALPHA = 0.001
+
+
+# Info Generator
+NUMBER_OF_URLS_TO_EXTRACT = 15

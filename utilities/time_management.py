@@ -34,7 +34,7 @@ def get_now():
 
 
 def get_today():
-    return datetime.today()
+    return get_differenced_day(datetime.today(), -19)  # TODO
 
 
 def get_safe_today():
@@ -93,7 +93,7 @@ def get_differenced_day(current_day, days_delta):
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%% EXECUTION TIME FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+# TODO this works only in series, implement process,thread independent timing
 
 start_time = None
 end_time = None
@@ -110,12 +110,12 @@ def time_taken():
     print 'Time to execute = ' + str(hours) + ':' + str(minutes) + ':' + str(seconds)
 
 
-def start():
+def start_timing():
     global start_time
     start_time = time()
 
 
-def stop():
+def stop_timing():
     global end_time
     end_time = time()
     time_taken()

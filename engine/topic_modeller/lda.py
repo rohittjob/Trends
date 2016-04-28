@@ -1,44 +1,46 @@
 """
-
-    Apply the LDA algorithm using libraries.
-    Additional files if needed should be created.
-
-    Ensure proper representation of generated topics.
-    Also the fitted model should be reusable for tweet_segregation.py or just call segregation with the model as
-    parameter.
-
-    Experiment with number of topics. 5 should be good as we are talking about a single day.
-
+Apply the LDA algorithm using libraries.
+Use the params in the config file.
+Save the LDA model.
 """
 from os.path import join
+
 from gensim import corpora, models
 
-from utilities.os_util import get_dir
+from utilities.config import NUMBER_OF_TOPICS, NUMBER_OF_PASSES, ALPHA
 from utilities.constants import *
-from utilities.time_management import start, stop, get_time
-from utilities.config import NUMBER_OF_TOPICS
+from utilities.os_util import get_dir
+from utilities.time_management import start_timing, stop_timing, get_time, get_today, get_date_string
+
+
+TODAY = get_today()
+TODAY_STRING = get_date_string(TODAY)
 
 ROOT = get_dir(__file__)
-DICTIONARY_PATH = join(ROOT, DATA_DIR, 'dict2.dict')
-CORPUS_PATH = join(ROOT, DATA_DIR, 'corp.mm')
+DICTIONARY_PATH = join(ROOT, DATA_DIR, DICTIONARY_PREFIX + TODAY_STRING + DICT)
+CORPUS_PATH = join(ROOT, DATA_DIR, CORPUS_PREFIX + TODAY_STRING + MM)
+LDA_PATH = join(ROOT, DATA_DIR, LDA_MODEL_PREFIX + TODAY_STRING + LDA)
 
-lda_params = {'num_topics': NUMBER_OF_TOPICS, 'passes': 20, 'alpha': 0.001}
-
-corpus = corpora.MmCorpus(CORPUS_PATH)
-dictionary = corpora.Dictionary.load(DICTIONARY_PATH)
+CORPUS = corpora.MmCorpus(CORPUS_PATH)
+DICTIONARY = corpora.Dictionary.load(DICTIONARY_PATH)
 
 
-print 'Started at ' + get_time() + '... '
+def execute():
 
-start()
+    print 'Started LDA at ' + get_time() + '... ',
 
-lda = models.LdaModel(corpus, id2word=dictionary,
-                      num_topics=lda_params['num_topics'],
-                      passes=lda_params['passes'],
-                      alpha=lda_params['alpha'])
+    start_timing()
 
-print lda.print_topics()
+    lda = models.LdaModel(CORPUS, id2word=DICTIONARY,
+                          num_topics=NUMBER_OF_TOPICS,
+                          passes=NUMBER_OF_PASSES,
+                          alpha=ALPHA)
 
-lda.save('data/lda2_2.lda')
+    lda.save(LDA_PATH)
 
-stop()
+    print 'Finished'
+    stop_timing()
+
+
+if __name__ == '__main__':
+    execute()
