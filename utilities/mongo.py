@@ -1,11 +1,16 @@
 from pymongo import MongoClient, ASCENDING, DESCENDING
 from pymongo.errors import BulkWriteError
 
-from utilities.constants import VALUE, ENTITIES, TIMESTAMP, ID, COUNT
+from utilities.constants import VALUE, ENTITIES, TIMESTAMP, ID, COUNT, READ
 from utilities.entities.Collection import Collection
 
 
 client = MongoClient()
+
+
+def get_urls():
+    f = open('urls/topic4.tsv', READ)
+    return [url for url in f]
 
 
 def check_collection(db, coll):
